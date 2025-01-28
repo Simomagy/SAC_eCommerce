@@ -2,7 +2,58 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-white flex flex-col justify-center items-center">
+<!-- Data Section -->
+<div class="px-4 py-2">
+    <div class="flex gap-8">
+        <div>Cliente</div>
+        <div>Feedback</div>
+    </div>
+    <p class="text-gray-500">data</p>
 </div>
+
+<!-- Hero Section -->
+<div class="max-w-4xl mx-auto my-12 p-16 rounded-lg">
+    <h1 class="text-6xl font-bold text-center mb-4 leading-relaxed">
+        La
+        <span class="font-black text-primary-500 underline drop-shadow-[-10px_-10px_15px_#EE7A4D]">tecnologia</span>
+        <br/>
+        a portata di
+        <span class="font-black text-primary-500 drop-shadow-[10px_10px_15px_#EE7A4D]">Click</span>
+    </h1>
+    <p class="text-xl text-center text-zinc-500">• VELOCITA' • SEMPLICITA' • QUALITA' •</p>
+</div>
+
+<div class="flex md:order-2">
+    <div class="relative mr-3 md:mr-0 hidden md:block">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        <input type="text" id="email-adress-icon"
+               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2"
+               placeholder="Search...">
+    </div>
+</div>
+
+<!-- Products Section -->
+<div class="px-4">
+    <h2 class="text-gray-500 mb-4">Carosello prodotti piu' venduti</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Qui andrebbero i prodotti -->
+    </div>
+</div>
+</body>
+</html>
