@@ -3,6 +3,8 @@ CREATE DATABASE ECommerceDB;
 
 USE ECommerceDB;
 
+-- ANDARE IN ORDINE UNA ALLA VOLTA
+
 -- Tabella Cliente
 CREATE TABLE CLIENTE (
                          ID_Cliente INT PRIMARY KEY IDENTITY(1,1),
@@ -51,6 +53,17 @@ CREATE TABLE FEEDBACK (
                           FOREIGN KEY (ID_Cliente) REFERENCES CLIENTE(ID_Cliente)
 );
 
+-- Tabella Negozio
+CREATE TABLE NEGOZIO (
+                        ID_Negozio INT PRIMARY KEY,
+                        Nome NVARCHAR(50),
+                        Indirizzo NVARCHAR(100),
+                        Citta NVARCHAR(50),
+                        CAP NVARCHAR(10),
+                        Provincia NVARCHAR(50),
+                        Data_Apertura DATETIME DEFAULT GETDATE()
+);
+
 -- Tabella Inventario
 CREATE TABLE INVENTARIO (
                             ID_Inventario INT PRIMARY KEY,
@@ -58,5 +71,7 @@ CREATE TABLE INVENTARIO (
                             ID_Locazione INT,
                             Tipo_Locazione NVARCHAR(20), -- 'Negozio' o 'Magazzino'
                             Quantita INT,
-                            FOREIGN KEY (ID_Prodotto) REFERENCES PRODOTTO(ID_Prodotto)
+                            FOREIGN KEY (ID_Prodotto) REFERENCES PRODOTTO(ID_Prodotto),
+                            FOREIGN KEY (ID_Locazione) REFERENCES NEGOZIO(ID_Negozio)
+
 );

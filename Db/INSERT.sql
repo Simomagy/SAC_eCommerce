@@ -1,4 +1,9 @@
-﻿-- Inserimenti per la tabella CLIENTE
+﻿-- ANDARE IN ORDINE UNA ALLA VOLTA
+-- ANDARE IN ORDINE UNA ALLA VOLTA
+-- ANDARE IN ORDINE UNA ALLA VOLTA
+-- ANDARE IN ORDINE UNA ALLA VOLTA
+
+-- Inserimenti per la tabella CLIENTE
 INSERT INTO CLIENTE (Nome, Cognome, Email, Password, Points, Card_Number)
 VALUES 
 ('Mario', 'Rossi', 'mario.rossi@example.com', 'hash_password_123', 120, '1234567890123456'),
@@ -42,26 +47,52 @@ VALUES
 (2, 1002, 2, 4, 'Buon prodotto, ma servizio clienti migliorabile.'),
 (3, 1003, 3, 3, 'Consegna lenta, ma il prodotto è buono.');
 
+-- Inserimenti per la tabella NEGOZIO
+INSERT INTO NEGOZIO (ID_Negozio, Nome, Indirizzo, Citta, CAP, Provincia)
+VALUES
+(1, 'Elettronica Store', 'Via Roma 123', 'Napoli', '80013', 'NA'),
+(2, 'Audio Shop', 'Corso Italia 456', 'Caserta', '81100', 'CE'),
+(3, 'Informatica Center', 'Viale Europa 789', 'Salerno', '84121', 'SA');
+
 -- Inserimenti per la tabella INVENTARIO
 INSERT INTO INVENTARIO (ID_Inventario, ID_Prodotto, ID_Locazione, Tipo_Locazione, Quantita)
 VALUES 
 (1, 1, 1, 'Magazzino', 100),
-(2, 2, 2, 'Negozio', 30),
-(3, 3, 1, 'Magazzino', 90),
-(4, 4, 2, 'Negozio', 15),
-(5, 5, 3, 'Negozio', 25),
-(6, 6, 2, 'Negozio', 10),
-(7, 7, 1, 'Magazzino', 120),
-(8, 8, 3, 'Negozio', 5),
-(9, 9, 2, 'Negozio', 12),
-(10, 10, 1, 'Magazzino', 150),
-(11, 11, 1, 'Magazzino', 80),
-(12, 12, 2, 'Negozio', 14),
-(13, 13, 3, 'Negozio', 22),
-(14, 14, 1, 'Magazzino', 140),
-(15, 15, 3, 'Negozio', 33),
-(16, 16, 1, 'Magazzino', 130),
-(17, 17, 2, 'Negozio', 11),
-(18, 18, 1, 'Magazzino', 200),
-(19, 19, 3, 'Negozio', 7),
-(20, 20, 1, 'Magazzino', 160);
+(2, 1, 2, 'Negozio', 25),
+(3, 1, 3, 'Negozio', 25),
+(4, 2, 1, 'Magazzino', 50),
+(5, 2, 2, 'Negozio', 10),
+(6, 3, 1, 'Magazzino', 30),
+(7, 3, 3, 'Negozio', 15),
+(8, 4, 1, 'Magazzino', 20),
+(9, 4, 2, 'Negozio', 5),
+(10, 5, 1, 'Magazzino', 40),
+(11, 5, 3, 'Negozio', 10),
+(12, 6, 1, 'Magazzino', 15),
+(13, 6, 2, 'Negozio', 5),
+(14, 7, 1, 'Magazzino', 25),
+(15, 7, 3, 'Negozio', 10),
+(16, 8, 1, 'Magazzino', 20),
+(17, 8, 2, 'Negozio', 5),
+(18, 9, 1, 'Magazzino', 30),
+(19, 9, 3, 'Negozio', 10),
+(20, 10, 1, 'Magazzino', 10),
+(21, 10, 2, 'Negozio', 5),
+(22, 11, 1, 'Magazzino', 20),
+(23, 11, 3, 'Negozio', 5),
+(24, 12, 1, 'Magazzino', 15),
+(25, 12, 2, 'Negozio', 5),
+(26, 13, 1, 'Magazzino', 25),
+(27, 13, 3, 'Negozio', 10),
+(28, 14, 1, 'Magazzino', 20),
+(29, 14, 2, 'Negozio', 5),
+(30, 15, 1, 'Magazzino', 30),
+(31, 15, 3, 'Negozio', 10),
+(32, 16, 1, 'Magazzino', 10),
+(33, 16, 2, 'Negozio', 5),
+(34, 17, 1, 'Magazzino', 20),
+(35, 17, 3, 'Negozio', 5),
+(36, 18, 1, 'Magazzino', 25),
+(37, 18, 2, 'Negozio', 5),
+(38, 19, 1, 'Magazzino', 30),
+(39, 19, 3, 'Negozio', 10);
