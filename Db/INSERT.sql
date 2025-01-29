@@ -4,14 +4,14 @@
 -- ANDARE IN ORDINE UNA ALLA VOLTA
 
 -- Inserimenti per la tabella CLIENTE
-INSERT INTO CLIENTE (Nome, Cognome, Email, Password, Points, Card_Number)
+INSERT INTO UTENTI (Nome, Cognome, Email, Password, Points, Card_Number)
 VALUES 
 ('Mario', 'Rossi', 'mario.rossi@example.com', 'hash_password_123', 120, '1234567890123456'),
 ('Luigi', 'Bianchi', 'luigi.bianchi@example.com', 'hash_password_456', 90, '6543210987654321'),
 ('Giulia', 'Verdi', 'giulia.verdi@example.com', 'hash_password_789', 150, '9876543210987654');
 
 -- Inserimenti per la tabella PRODOTTO
-INSERT INTO PRODOTTO (Codice_SKU, Nome, Descrizione, Prezzo, Categoria)
+INSERT INTO PRODOTTI (Codice_SKU, Nome, Descrizione, Prezzo, Categoria)
 VALUES 
 ('SKU12345', 'Smartphone X12', 'Display 6.5 pollici, 128GB storage, Dual SIM', 699.99, 'Elettronica'),
 ('SKU54321', 'Cuffie Wireless Pro', 'Audio Hi-Fi, cancellazione del rumore attiva', 199.99, 'Audio'),
@@ -34,28 +34,28 @@ VALUES
 ('SKU70707', 'Router Wi-Fi 6', 'Connessione veloce e stabile', 199.99, 'Networking');
 
 -- Inserimenti per la tabella ORDINE
-INSERT INTO ORDINE (ID_Ordine, Tipo_Ordine, Totale, Stato, ID_Cliente, ID_Locazione_Ritiro)
+INSERT INTO ORDINI (ID_Ordine, Tipo_Ordine, Totale, Stato, ID_Cliente, ID_Locazione_Ritiro)
 VALUES 
 (1001, 'Acquisto Online', 749.98, 'Completato', 1, NULL),
 (1002, 'Acquisto Negozio', 199.99, 'Completato', 2, 101),
 (1003, 'Acquisto Online', 149.99, 'In Elaborazione', 3, NULL);
 
 -- Inserimenti per la tabella FEEDBACK
-INSERT INTO FEEDBACK (ID_Feedback, ID_Ordine, ID_Cliente, Valutazione, Testo)
+INSERT INTO FEEDBACKS (ID_Feedback, ID_Ordine, ID_Cliente, Valutazione, Testo)
 VALUES 
 (1, 1001, 1, 5, 'Prodotto fantastico, spedizione rapida!'),
 (2, 1002, 2, 4, 'Buon prodotto, ma servizio clienti migliorabile.'),
 (3, 1003, 3, 3, 'Consegna lenta, ma il prodotto è buono.');
 
 -- Inserimenti per la tabella NEGOZIO
-INSERT INTO NEGOZIO (ID_Negozio, Nome, Indirizzo, Citta, CAP, Provincia)
+INSERT INTO NEGOZI (ID_Negozio, Nome, Indirizzo, Citta, CAP, Provincia)
 VALUES
 (1, 'Elettronica Store', 'Via Roma 123', 'Napoli', '80013', 'NA'),
 (2, 'Audio Shop', 'Corso Italia 456', 'Caserta', '81100', 'CE'),
 (3, 'Informatica Center', 'Viale Europa 789', 'Salerno', '84121', 'SA');
 
 -- Inserimenti per la tabella INVENTARIO
-INSERT INTO INVENTARIO (ID_Inventario, ID_Prodotto, ID_Locazione, Tipo_Locazione, Quantita)
+INSERT INTO INVENTARI (ID_Inventario, ID_Prodotto, ID_Locazione, Tipo_Locazione, Quantita)
 VALUES 
 (1, 1, 1, 'Magazzino', 100),
 (2, 1, 2, 'Negozio', 25),
