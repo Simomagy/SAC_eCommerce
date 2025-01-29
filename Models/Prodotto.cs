@@ -14,23 +14,5 @@ namespace SAC_eCommerce.Models
         public bool Stato { get; set; } = true; 
         public DateTime Data_Inserimento { get; set; } = DateTime.Now;
 
-
-        // Costruttore vuoto
-        public Prodotto() { }
-
-        // Costruttore con parametri
-        public Prodotto( int id, int id_prodotto, string codice_sku, string nome, string descrizione, decimal prezzo, string categoria, bool stato, DateTime data_inserimento) : base(id)
-        {
-            ID_Prodotto = id_prodotto;
-            Codice_SKU = codice_sku;
-            Nome = nome;
-            Descrizione = descrizione;
-            Prezzo = prezzo;
-            Categoria = categoria;
-            Stato = stato;
-            Data_Inserimento = data_inserimento;
-        }
-
-
     }
 }
