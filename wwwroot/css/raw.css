@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .base-button {
+        @apply bg-zinc-700/50 cursor-pointer rounded-md px-3 py-1 text-sm flex justify-center border-2 border-transparent items-center gap-2 text-zinc-50 font-semibold hover:text-zinc-50 hover:border-zinc-500 hover:bg-zinc-600/60 transition-all duration-300;
+    }
+}

@@ -8,7 +8,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-zinc-950 text-white flex flex-col justify-center items-center">
 
@@ -23,7 +22,7 @@
         <i class="ti ti-pointer text-primary-500 text-2xl"></i>
     </h1>
     <p class="text-xl text-center text-zinc-500 flex justify-center items-center">
-    <i class="ti ti-mail-fast text-2xl mr-2"></i>
+        <i class="ti ti-mail-fast text-3xl mx-2"></i>
     Velocità
     <i class="ti ti-sparkles text-2xl mx-2"></i>
     Qualità
@@ -49,23 +48,17 @@
 
 <!-- Products Section -->
 <div class="bg-zinc-900/50 rounded-md h-auto w-full md:w-4/5 md:mx-auto mt-10">
-    <h2 class="text-gray-500 bg-zinc-700/50 mb-4 text-center font-semibold py-3">I nostri migliori prodotti</h2>
+    <h2 class="text-gray-300 bg-zinc-700/50 mb-4 text-center font-semibold py-3">I nostri migliori prodotti</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-        <div class="bg-zinc-900/50 rounded-md p-4 flex flex-col gap-4">
-            <h3 class="text-xl font-bold text-zinc-50">Prodotto 1</h3>
-            <img src="https://placehold.co/400" alt="Prodotto 1" class="w-full object-cover rounded-md opacity-30">
-            <p class="text-gray-500">Descrizione prodotto 1</p>
-        </div>
-        <div class="bg-zinc-900/50 rounded-md p-4 flex flex-col gap-4">
-            <h3 class="text-xl font-bold text-zinc-50">Prodotto 2</h3>
-            <img src="https://placehold.co/400" alt="Prodotto 2" class="w-full object-cover rounded-md opacity-30">
-            <p class="text-gray-500">Descrizione prodotto 2</p>
-        </div>
-        <div class="bg-zinc-900/50 rounded-md p-4 flex flex-col gap-4">
-            <h3 class="text-xl font-bold text-zinc-50">Prodotto 3</h3>
-            <img src="https://placehold.co/400" alt="Prodotto 3" class="w-full object-cover rounded-md opacity-30">
-            <p class="text-gray-500">Descrizione prodotto 3</p>
-        </div>
+        @for (var i = 0; i < 3; i++)
+        {
+            <div class="bg-zinc-900/50 rounded-md p-4 flex flex-col gap-4">
+                <h3 class="text-xl font-bold text-zinc-50">Prodotto @(i + 1)</h3>
+                <img src="https://placehold.co/400" alt="Prodotto @(i + 1)"
+                     class="w-full object-cover rounded-md opacity-30">
+                <p class="text-gray-500">Descrizione prodotto @(i + 1)</p>
+            </div>
+        }
     </div>
 </div>
 
