@@ -6,7 +6,9 @@ public class Ordine : Entity
     public string Tipo_Ordine { get; set; }
     public float Totale { get; set; }
     public string Stato { get; set; }
-    public Cliente cliente { get; set; }
+
+    // TODO: Toglie il commento quando la classe Cliente è stata implementata
+    // public Cliente cliente { get; set; }
     public int ID_LocazioneRitiro { get; set; }
     
     

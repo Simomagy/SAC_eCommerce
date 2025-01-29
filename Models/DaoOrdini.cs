@@ -6,7 +6,7 @@ public class DaoOrdini
     #region Inizializzazione
 
     private readonly Database _db;
-    private readonly string _tabella;
+    private readonly string? _tabella;
 
     private DaoOrdini(IConfiguration configuration)
     {
@@ -24,7 +24,8 @@ public class DaoOrdini
             { "@tipoOrdine", ((Ordine)entity).Tipo_Ordine.Replace("'", "''") },
             { "@totale", ((Ordine)entity).Totale },
             { "@stato", ((Ordine)entity).Stato.Replace("'", "''") },
-            { "@id_Cliente", ((Ordine)entity).Cliente.Id },
+            // TODO: Toglie il commento quando la classe Cliente è stata implementata
+            // { "@id_Cliente", ((Ordine)entity).Cliente.Id },
             { "@id_LocazioneRitiro", ((Ordine)entity).ID_LocazioneRitiro }
             
         };
@@ -42,7 +43,8 @@ public class DaoOrdini
             { "@tipoOrdine", ((Ordine)entity).Tipo_Ordine.Replace("'", "''") },
             { "@totale", ((Ordine)entity).Totale },
             { "@stato", ((Ordine)entity).Stato.Replace("'", "''") },
-            { "@id_Cliente", ((Ordine)entity).Cliente.Id },
+            // TODO: Toglie il commento quando la classe Cliente è stata implementata
+            // { "@id_Cliente", ((Ordine)entity).Cliente.Id },
             { "@id_LocazioneRitiro", ((Ordine)entity).ID_LocazioneRitiro }
         };
          string query =
