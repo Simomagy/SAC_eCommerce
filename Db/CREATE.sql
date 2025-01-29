@@ -7,7 +7,7 @@ USE ECommerceDB;
 
 -- Tabella Cliente
 CREATE TABLE UTENTI (
-                         ID_Cliente INT PRIMARY KEY IDENTITY(1,1),
+                         ID_Utente INT PRIMARY KEY IDENTITY(1,1),
                          Nome NVARCHAR(50),
                          Cognome NVARCHAR(50),
                          Email NVARCHAR(100) UNIQUE,
@@ -39,7 +39,7 @@ CREATE TABLE ORDINI (
                         Stato NVARCHAR(50),
                         ID_Cliente INT,
                         ID_Locazione_Ritiro INT NULL, -- Opzionale per ordini online
-                        FOREIGN KEY (ID_Cliente) REFERENCES CLIENTE(ID_Cliente)
+                        FOREIGN KEY (ID_Cliente) REFERENCES UTENTI(ID_Utente)
 );
 
 -- Tabella Feedback
@@ -50,8 +50,8 @@ CREATE TABLE FEEDBACKS (
                           Valutazione TINYINT CHECK (Valutazione BETWEEN 1 AND 5),
                           Testo NVARCHAR(500),
                           Data_Inserimento DATETIME DEFAULT GETDATE(),
-                          FOREIGN KEY (ID_Ordine) REFERENCES ORDINE(ID_Ordine),
-                          FOREIGN KEY (ID_Cliente) REFERENCES CLIENTE(ID_Cliente)
+                          FOREIGN KEY (ID_Ordine) REFERENCES ORDINI(ID_Ordine),
+                          FOREIGN KEY (ID_Cliente) REFERENCES UTENTI(ID_Utente)
 );
 
 -- Tabella Negozio
@@ -72,7 +72,7 @@ CREATE TABLE INVENTARI (
                             ID_Locazione INT,
                             Tipo_Locazione NVARCHAR(20), -- 'Negozio' o 'Magazzino'
                             Quantita INT,
-                            FOREIGN KEY (ID_Prodotto) REFERENCES PRODOTTO(ID_Prodotto),
-                            FOREIGN KEY (ID_Locazione) REFERENCES NEGOZIO(ID_Negozio)
+                            FOREIGN KEY (ID_Prodotto) REFERENCES PRODOTTI(ID_Prodotto),
+                            FOREIGN KEY (ID_Locazione) REFERENCES NEGOZI(ID_Negozio)
 
 );
