@@ -6,7 +6,7 @@ USE ECommerceDB;
 -- ANDARE IN ORDINE UNA ALLA VOLTA
 
 -- Tabella Cliente
-CREATE TABLE USER (
+CREATE TABLE UTENTI (
                          ID_Cliente INT PRIMARY KEY IDENTITY(1,1),
                          Nome NVARCHAR(50),
                          Cognome NVARCHAR(50),
@@ -19,7 +19,7 @@ CREATE TABLE USER (
 );
 
 -- Tabella Prodotto
-CREATE TABLE PRODOTTO (
+CREATE TABLE PRODOTTI (
                           ID_Prodotto INT PRIMARY KEY IDENTITY(1,1),
                           Codice_SKU NVARCHAR(20) UNIQUE,
                           Nome NVARCHAR(100),
@@ -31,7 +31,7 @@ CREATE TABLE PRODOTTO (
 );
 
 -- Tabella Ordine
-CREATE TABLE ORDINE (
+CREATE TABLE ORDINI (
                         ID_Ordine INT PRIMARY KEY,
                         Data DATETIME DEFAULT GETDATE(),
                         Tipo_Ordine NVARCHAR(50),
@@ -43,7 +43,7 @@ CREATE TABLE ORDINE (
 );
 
 -- Tabella Feedback
-CREATE TABLE FEEDBACK (
+CREATE TABLE FEEDBACKS (
                           ID_Feedback INT PRIMARY KEY,
                           ID_Ordine INT,
                           ID_Cliente INT,
@@ -55,7 +55,7 @@ CREATE TABLE FEEDBACK (
 );
 
 -- Tabella Negozio
-CREATE TABLE NEGOZIO (
+CREATE TABLE NEGOZI (
                         ID_Negozio INT PRIMARY KEY,
                         Nome NVARCHAR(50),
                         Indirizzo NVARCHAR(100),
@@ -66,7 +66,7 @@ CREATE TABLE NEGOZIO (
 );
 
 -- Tabella Inventario
-CREATE TABLE INVENTARIO (
+CREATE TABLE INVENTARI (
                             ID_Inventario INT PRIMARY KEY,
                             ID_Prodotto INT,
                             ID_Locazione INT,
