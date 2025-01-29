@@ -29,7 +29,7 @@ public class DaoOrdini
             
         };
         const string query =
-            "INSERT INTO ORDINI (Data, Tipo_Ordine, Totale, Stato, Cliente, ID_LocazioneRitiro) VALUES (@data, @tipoOrdine, @totale, @stato, @id_Cliente, @id_LocazioneRitiro)";
+            "INSERT INTO {_tabella} (Data, Tipo_Ordine, Totale, Stato, Cliente, ID_LocazioneRitiro) VALUES (@data, @tipoOrdine, @totale, @stato, @id_Cliente, @id_LocazioneRitiro)";
 
         return _db.UpdateDb(query, parameters);
     }
@@ -46,21 +46,21 @@ public class DaoOrdini
             { "@id_LocazioneRitiro", ((Ordine)entity).ID_LocazioneRitiro }
         };
         const string query =
-            "UPDATE ORDINI SET Data = @data, Tipo_Ordine = @tipoOrdine, Totale = @totale, Stato = @stato, Cliente = @id_Cliente, LocazioneRitiro = @id_LocazioneRitiro, WHERE Id = @Id";
+            "UPDATE {_tabella} SET Data = @data, Tipo_Ordine = @tipoOrdine, Totale = @totale, Stato = @stato, Cliente = @id_Cliente, LocazioneRitiro = @id_LocazioneRitiro WHERE ID_Ordine = @Id";
 
         return _db.UpdateDb(query, parameters);
     }
 
     public bool DeleteRecord(int recordId)
     {
-        const string query = "DELETE FROM ORDINI WHERE Id = @Id";
+        const string query = "DELETE FROM {_tabella} WHERE ID_Ordine = @Id";
         var parameters = new Dictionary<string, object> { { "@Id", recordId } };
         return _db.UpdateDb(query, parameters);
     }
 
     public Entity? FindRecord(int recordId)
     {
-        const string query = "SELECT * FROM ORDINI WHERE Id = @Id";
+        const string query = "SELECT * FROM {_tabella} WHERE ID_Ordine = @Id";
         var parameters = new Dictionary<string, object> { { "@Id", recordId } };
         var singleResponse = _db.ReadOneDb(query, parameters);
         if (singleResponse == null)
