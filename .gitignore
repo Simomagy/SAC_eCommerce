@@ -9,7 +9,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-
+./wwwroot/css/tw_generated.css
 # AWS User-specific
 .idea/**/aws.xml
 
@@ -609,3 +609,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 /package-lock.json
+!/wwwroot/css/tw_generated.css
