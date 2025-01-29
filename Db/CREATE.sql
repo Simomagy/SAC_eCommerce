@@ -6,12 +6,13 @@ USE ECommerceDB;
 -- ANDARE IN ORDINE UNA ALLA VOLTA
 
 -- Tabella Cliente
-CREATE TABLE CLIENTE (
+CREATE TABLE USER (
                          ID_Cliente INT PRIMARY KEY IDENTITY(1,1),
                          Nome NVARCHAR(50),
                          Cognome NVARCHAR(50),
                          Email NVARCHAR(100) UNIQUE,
                          Password NVARCHAR(128), -- Per hash della password
+                         Role NVARCHAR(50) DEFAULT 'User',
                          Points INT DEFAULT 0,
                          Card_Number NVARCHAR(20) UNIQUE,
                          Data_Registrazione DATETIME DEFAULT GETDATE()
