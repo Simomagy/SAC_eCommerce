@@ -2,7 +2,7 @@
 
 namespace SAC_eCommerce.Models
 {
-    public class DAOUtenti
+    public class DaoUtenti
     {
         #region Inizializzazione
 
@@ -42,7 +42,7 @@ namespace SAC_eCommerce.Models
 
         public List<Utente> GetRecords()
         {
-            const string query = $"SELECT * FROM {_tabella}"
+            var query = $"SELECT * FROM {_tabella}";
             List<Utente> utenti = [];
             var fullResponse = _db.ReadDb(query);
             if (fullResponse == null)
@@ -88,14 +88,14 @@ namespace SAC_eCommerce.Models
 
         public bool DeleteRecord(int id)
         {
-            string query = $"DELETE FROM {_tabella} WHERE id_utente = {id})";
+            var query = $"DELETE FROM {_tabella} WHERE id_utente = {id}";
 
             return _db.UpdateDb(query);
         }
 
-        public Utente FindUser(int id)
+        public Utente? FindUser(int id)
         {
-            const string query = $"SELECT * FROM {_tabella} where id = {id}";
+            var query = $"SELECT * FROM {_tabella} where id = {id}";
 
             var singleResponse = _db.ReadOneDb(query);
             if (singleResponse == null)
