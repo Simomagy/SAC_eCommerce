@@ -2,14 +2,14 @@
 
 namespace SAC_eCommerce.Models
 {
-    public class DAOProdotti
+    public class DaoProdotti
     {
         #region Inizializzazione
 
         private readonly Database _db;
         private readonly string _tabella;
 
-        private DAOProdotti(IConfiguration configuration)
+        private DaoProdotti(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
             _tabella = configuration["tables.prodotti"];
@@ -34,7 +34,25 @@ namespace SAC_eCommerce.Models
             };
 
             return _db.UpdateDb(query, parameters);
-         
+        }
+
+        public bool UpdateRecord(Prodotto prodotto)
+        {
+
+            var query = $"UPDATE {_tabella} SET Codice_SKU = @Codice_SKU, Nome = @Nome, Descrizione = @Descrizione, Prezzo = @Prezzo, Categoria = @Categoria, Stato = @Stato, Data_Inserimento = @Data_Inserimento WHERE ID_Prodotto = @ID_Prodotto";
+            var parameters = new Dictionary<string, object>
+            {
+                {"@ID_Prodotto", prodotto.ID_Prodotto},
+                {"@Codice_SKU", prodotto.Codice_SKU},
+                {"@Nome", prodotto.Nome},
+                {"@Descrizione", prodotto.Descrizione},
+                {"@Prezzo", prodotto.Prezzo},
+                {"@Categoria", prodotto.Categoria},
+                {"@Stato", prodotto.Stato},
+                {"@Data_Inserimento", prodotto.Data_Inserimento}
+            };
+
+            return _db.UpdateDb(query, parameters);
         }
 
         public bool DeleteRecord(int id)
@@ -56,6 +74,7 @@ namespace SAC_eCommerce.Models
             var dataTable = _db.ReadDb(query);
 
             var prodotti = new List<Prodotto>();
+            if (dataTable == null) return prodotti;
            
             foreach (var row in dataTable)
             {
