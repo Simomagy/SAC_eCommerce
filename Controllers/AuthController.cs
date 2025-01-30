@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSSTU.DB.Utility;
+using Newtonsoft.Json;
 using SAC_eCommerce.Models.Classes;
 using SAC_eCommerce.Models.Daos;
 
@@ -35,7 +36,8 @@ public class AuthController : Controller
         {
             var user = _daoUtenti.FindUser(email);
             _loggedUser = user;
-            return View("../Home/Index", user);
+            TempData["LoggedUser"] = JsonConvert.SerializeObject(user);
+            return RedirectToAction("Index", "Home");
         }
 
         _loginAttempts++;
@@ -46,15 +48,22 @@ public class AuthController : Controller
     public IActionResult AggiungiUtente(Dictionary<string, string> parameters)
     {
         var email = parameters["email"];
-        var password = parameters["pwd"];
+        var password = parameters["password"];
 
         var userExists = _daoUtenti.UserExists(email, password);
         if (userExists)
         {
-            return RedirectToAction("Signup");
+            return RedirectToAction("Login");
         }
         var user = new Utente();
         user.TypeSort(parameters);
+
+        // Dati di default per evitare nulli
+        user.Nome = "Non specificato";
+        user.Cognome = "Non specificato";
+        user.Points = 0;
+        user.Card_Number = "Non aperta";
+
         if (email.Contains("@dipendente.techretailspa.it"))
         {
             user.Role = "dipendente";
@@ -66,7 +75,10 @@ public class AuthController : Controller
         {
             user.Role = "user";
         }
+
+        _daoUtenti.CreateRecord(user);
         _loggedUser = user;
+        TempData["LoggedUser"] = JsonConvert.SerializeObject(user);
         return View("../Home/Index", user);
     }
 
@@ -83,16 +95,4 @@ public class AuthController : Controller
         return View();
     }
 
-    [HttpPost]
-    public IActionResult Register(Dictionary<string, string> parameters)
-    {
-        Entity user = new Utente();
-        user.TypeSort(parameters);
-        var result = _daoUtenti.CreateRecord(user);
-        _loginAttempts = 0;
-        if (!result)
-            return RedirectToAction("Signup");
-        _loggedUser = (Utente)user;
-        return RedirectToAction("Login");
-    }
 }

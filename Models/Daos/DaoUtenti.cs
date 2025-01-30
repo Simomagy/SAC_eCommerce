@@ -20,21 +20,21 @@ namespace SAC_eCommerce.Models.Daos
 
         #region CRUD
 
-        public bool CreateRecord(Entity entity)
+        public bool CreateRecord(Utente utente)
         {
-            var utente = (Utente)entity;
             var pwd = utente.Password;
             var parametri = new Dictionary<string, object>
             {
                 {"@nome", utente.Nome.Replace("'", "''")},
                 {"@cognome", utente.Cognome.Replace("'", "''")},
                 {"@email", utente.Email.Replace("'", "''")},
+                {"@role", utente.Role},
                 {"@points", utente.Points},
                 {"@card_number", utente.Card_Number.Replace("'", "''")},
             };
 
-            var query = $"INSERT INTO {_tabella} (Nome, Cognome, Email, Password, Points, Card_Number) " +
-                        $"VALUES (@nome, @cognome, @email, HASHBYTES('SHA2_512', '{pwd}'), @points, @card_number ) ";
+            var query = $"INSERT INTO {_tabella} (Nome, Cognome, Email, Password, Role, Points, Card_Number) " +
+                        $"VALUES (@nome, @cognome, @email, HASHBYTES('SHA2_512', '{pwd}'), @role, @points, @card_number ) ";
 
             var response = _db.UpdateDb(query, parametri);
 

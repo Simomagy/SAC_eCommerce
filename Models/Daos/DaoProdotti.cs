@@ -12,7 +12,7 @@ namespace SAC_eCommerce.Models.Daos
         public DaoProdotti(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
-            _tabella = configuration["tables.prodotti"];
+            _tabella = configuration["tables:prodotti"];
         }
         #endregion
         public bool CreateRecord(Prodotto prodotto)
