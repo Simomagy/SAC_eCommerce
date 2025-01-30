@@ -8,7 +8,8 @@ namespace SAC_eCommerce.Models.Daos
         #region Inizializzazione
         private readonly Database _db;
         private readonly string _tabella;
-        private DaoProdotti(IConfiguration configuration)
+
+        public DaoProdotti(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
             _tabella = configuration["tables.prodotti"];

@@ -10,10 +10,10 @@ namespace SAC_eCommerce.Models.Daos
         private readonly Database _db;
         private readonly string _tabella;
 
-        private DaoUtenti(IConfiguration configuration)
+        public DaoUtenti(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
-            _tabella = configuration["tables.utenti"];
+            _tabella = configuration["tables:utenti"];
         }
 
         #endregion
@@ -94,18 +94,27 @@ namespace SAC_eCommerce.Models.Daos
             return _db.UpdateDb(query);
         }
 
-        public Utente? FindUser(int id)
+        public Utente? FindUser(string email)
         {
-            var query = $"SELECT * FROM {_tabella} where id = {id}";
+            var query = $"SELECT * FROM {_tabella} WHERE email = '{email}'";
+            var response = _db.ReadOneDb(query);
 
-            var singleResponse = _db.ReadOneDb(query);
-            if (singleResponse == null)
+            if (response == null)
                 return null;
 
-            var ut = new Utente();
-            ut.TypeSort(singleResponse);
+            var utente = new Utente();
+            utente.TypeSort(response);
 
-            return ut;
+            return utente;
+        }
+
+        public bool UserExists(string email, string password)
+        {
+            var query =
+                $"SELECT * FROM {_tabella} WHERE Email = '{email}' AND Password = HASHBYTES('SHA2_512', '{password}')";
+            var response = _db.ReadOneDb(query);
+
+            return response != null;
         }
         #endregion
     }

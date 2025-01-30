@@ -11,7 +11,7 @@ public class DaoOrdini
     private readonly Database _db;
     private readonly string? _tabella;
 
-    private DaoOrdini(IConfiguration configuration)
+    public DaoOrdini(IConfiguration configuration)
     {
         _db = new Database(configuration["db_name"], configuration["server_db"]);
         _tabella = configuration["tables.ordini"];

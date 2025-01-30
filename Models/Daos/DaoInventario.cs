@@ -10,7 +10,7 @@ public class DaoInventario
     private readonly Database _db;
     private readonly string? _tabella;
 
-    private DaoInventario(IConfiguration configuration)
+    public DaoInventario(IConfiguration configuration)
     {
         _db = new Database(configuration["db_name"], configuration["server_db"]);
         _tabella = configuration["tables.inventario"];

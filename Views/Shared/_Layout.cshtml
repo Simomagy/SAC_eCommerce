@@ -1,10 +1,12 @@
-﻿@{
+﻿@model SAC_eCommerce.Models.Classes.Utente
+
+@{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
-    // TODO: Implementare il controllo dell'utente loggato e dell'utente amministratore
-    var isLogged = true;
-    var isAdmin = false;
+    var isLogged = Model != null;
+    var isDipendente = isLogged && Model.Role == "dipendente";
+    var isManager = isLogged && Model.Role == "manager";
 
     ViewData["Title"] = "Home";
 }
@@ -44,7 +46,7 @@
                     <a class="@(currentController == "Prodotti" && currentAction == "Index" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300"
                        href="">Prodotti</a>
                 </li>
-                @if (isLogged && isAdmin)
+                @if (isLogged && isManager || isDipendente)
                 {
                     <!-- Apps -->
                     <button type="button" id="appsButton"
@@ -62,16 +64,19 @@
                             Apps
                         </div>
                         <div class="grid grid-cols-3 gap-4 p-4">
-                            <a asp-controller="Admin" asp-action="Dashboard"
-                               class="block p-4 text-center base-button group">
-                                <i class="ti ti-shopping-cart text-xl"></i>
-                                <div class="text-sm font-medium text-gray-900 dark:text-white">Vendite</div>
-                            </a>
-                            <a asp-controller="Admin" asp-action="Clienti"
-                               class="block p-4 text-center base-button group">
-                                <i class="ti ti-users text-xl"></i>
-                                <div class="text-sm font-medium text-gray-900 dark:text-white">Clienti</div>
-                            </a>
+                            @if (isManager)
+                            {
+                                <a asp-controller="Admin" asp-action="Dashboard"
+                                   class="block p-4 text-center base-button group">
+                                    <i class="ti ti-shopping-cart text-xl"></i>
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">Vendite</div>
+                                </a>
+                                <a asp-controller="Admin" asp-action="Clienti"
+                                   class="block p-4 text-center base-button group">
+                                    <i class="ti ti-users text-xl"></i>
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">Clienti</div>
+                                </a>
+                            }
                             <a asp-controller="Admin" asp-action="Prodotti"
                                class="block p-4 text-center base-button group">
                                 <i class="ti ti-inbox text-xl"></i>
@@ -122,15 +127,15 @@
                 <a id="userButton"
                    class="base-button">
                     <i class="ti ti-user text-xl"></i>
-                    Nome
+                    @Model.Nome
                 </a>
                 <div
                     class="hidden backdrop-blur-sm m-0 p-0 absolute z-50 w-56 text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
                     id="userDropdown">
                     <div class="py-3 px-4">
-                        <span class="block text-sm font-semibold text-gray-900 dark:text-white">Test User</span>
+                        <span class="block text-sm font-semibold text-gray-900 dark:text-white">@Model.Nome @Model.Cognome</span>
                         <span
-                            class="block text-sm text-gray-500 truncate dark:text-gray-400">test@fozzanapoli.com</span>
+                            class="block text-sm text-gray-500 truncate dark:text-gray-400">@Model.Email</span>
                     </div>
                     <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
                         <li>
