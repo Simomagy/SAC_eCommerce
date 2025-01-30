@@ -1,6 +1,11 @@
 ﻿@{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    // TODO: Implementare il controllo dell'utente loggato e dell'utente amministratore
+    var isLogged = true;
+    var isAdmin = false;
+
     ViewData["Title"] = "Home";
 }
 
@@ -13,6 +18,7 @@
     <link rel="stylesheet" href="~/css/tw_generated.css" asp-append-version="true"/>
     <link href="~/lib/tabler-icons-3.20.0/webfont/tabler-icons.css" rel="stylesheet">
     <link href="~/favicon.ico" rel="icon" type="image/x-icon"/>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
 </head>
 <body>
 <header>
@@ -31,34 +37,140 @@
         <nav class="flex items-center justify-center w-full">
             <ul class="flex items-center justify-center space-x-4">
                 <li class="relative inline-block">
-                    <a class="@(currentController == "Home" && currentAction == "Index" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300" href="">Home</a>
+                    <a class="@(currentController == "Home" && currentAction == "Index" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300"
+                       href="">Home</a>
                 </li>
                 <li class="relative inline-block">
-                    <a class="@(currentController == "Prodotti" && currentAction == "Index" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300" href="">Prodotti</a>
+                    <a class="@(currentController == "Prodotti" && currentAction == "Index" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300"
+                       href="">Prodotti</a>
                 </li>
-                <li class="relative inline-block">
-                    <a class="@(currentController == "Admin" && currentAction == "Index" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300" href="">Admin</a>
-                </li>
+                @if (isLogged && isAdmin)
+                {
+                    <!-- Apps -->
+                    <button type="button" id="appsButton"
+                            class="base-button">
+                        <!-- Icon -->
+                        <i class="ti ti-apps text-xl"></i>
+                        <span class="text-sm">Apps</span>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div
+                        class="hidden absolute top-[100%] m-0 p-0 overflow-hidden z-50 max-w-sm text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
+                        id="appsDropdown">
+                        <div
+                            class="block py-2 px-4 text-base font-medium text-center text-zinc-50 bg-zinc-700">
+                            Apps
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 p-4">
+                            <a asp-controller="Admin" asp-action="Dashboard"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-shopping-cart text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Vendite</div>
+                            </a>
+                            <a asp-controller="Admin" asp-action="Clienti"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-users text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Clienti</div>
+                            </a>
+                            <a asp-controller="Admin" asp-action="Prodotti"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-inbox text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Notifiche</div>
+                            </a>
+                            <a asp-controller="Utente" asp-action="Profilo"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-user text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Profilo</div>
+                            </a>
+                            <a asp-controller="Utente" asp-action="Impostazioni"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-settings text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Impostazioni</div>
+                            </a>
+                            <a asp-controller="Admin" asp-action="Prodotti"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-box text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Prodotti</div>
+                            </a>
+                            <a asp-controller="Admin" asp-action="Ordini"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-credit-card text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Pagamenti</div>
+                            </a>
+                            <a asp-controller="Admin" asp-action="Ordini"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-briefcase text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Ordini</div>
+                            </a>
+                            <a asp-controller="Auth" asp-action="Logout"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-logout text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Esci</div>
+                            </a>
+                        </div>
+                    </div>
+                }
             </ul>
         </nav>
 
         <!-- buttons -->
         <nav class="contents">
-            <ul class="w-fit flex items-center justify-end">
-                <li class="ml-2 lg:ml-4 relative inline-block">
-                    <a class="" href="">
-                        <i class="ti ti-user text-gray-500 text-xl"></i>
-                    </a>
-                </li>
-                <li class="ml-2 lg:ml-4 relative inline-block">
-                    <a class="" href="">
-                        <div
-                            class="absolute -top-1 -right-2 z-10 bg-yellow-400/80 text-[8px] text-zinc-950 font-bold px-1 py-0.5 rounded-sm">
-                            12
-                        </div>
-                        <i class="ti ti-shopping-cart text-gray-500 text-xl"></i>
-                    </a>
-                </li>
+        <ul class="w-fit flex items-center justify-end">
+        <li class="ml-2 lg:ml-4 relative inline-block">
+            @if (isLogged)
+            {
+                <a id="userButton"
+                   class="base-button">
+                    <i class="ti ti-user text-xl"></i>
+                    Nome
+                </a>
+                <div
+                    class="hidden backdrop-blur-sm m-0 p-0 absolute z-50 w-56 text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
+                    id="userDropdown">
+                    <div class="py-3 px-4">
+                        <span class="block text-sm font-semibold text-gray-900 dark:text-white">Test User</span>
+                        <span
+                            class="block text-sm text-gray-500 truncate dark:text-gray-400">test@fozzanapoli.com</span>
+                    </div>
+                    <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
+                        <li>
+                            <a asp-controller="Utente" asp-action="Profilo"
+                               class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-zinc-600 dark:text-zinc-400 dark:hover:text-white transition-all duration-300">
+                                Profilo</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Utente" asp-action="Impostazioni"
+                               class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-zinc-600 dark:text-zinc-400 dark:hover:text-white transition-all duration-300">
+                                Impostazioni</a>
+                        </li>
+                    </ul>
+                    <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
+                        <li>
+                            <a asp-controller="Auth" asp-action="Logout"
+                               class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-zinc-600 dark:hover:text-white transition-all duration-300">
+                                Esci</a>
+                        </li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <a asp-controller="Auth" asp-action="Login"
+                   class="base-button">
+                    <i class="ti ti-login text-xl"></i>
+                    Login
+                </a>
+            }
+        </li>
+        <li class="ml-2 lg:ml-4 relative inline-block">
+            <a class="" href="">
+                <div
+                    class="absolute -top-1 -right-2 z-10 bg-yellow-400/80 text-[8px] text-zinc-950 font-bold px-1 py-0.5 rounded-sm">
+                    12
+                </div>
+                <i class="ti ti-shopping-cart text-gray-500 text-xl"></i>
+            </a>
+        </li>
             </ul>
         </nav>
 
@@ -91,7 +203,7 @@
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/navbar.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>
