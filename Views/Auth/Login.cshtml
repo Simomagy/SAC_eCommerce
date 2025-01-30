@@ -9,13 +9,13 @@
 <head>
     <title>title</title>
 </head>
-<body>
-<div class="mx-auto max-w-2xl py-16 sm:py-48 lg:py-24">
-  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+<body class="bg-zinc-950 text-white flex flex-col items-center">
+<div class="mx-auto max-w-2xl py-16 sm:py-48 lg:py-24 mt-10">
+  <div class="flex min-h-full flex-col justify-center mt-10">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-16 w-auto" src="~/assets/base-light.png" alt="Nebula Studios">
       <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-100"><span
-          class="text-orange-600 font-bold underline underline-offset-2">Sign in</span> to your account</h2>
+          class="text-orange-600 font-bold underline underline-offset-2">Accedi</span> al tuo account</h2>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -33,7 +33,7 @@
           <div class="flex items-center justify-between">
             <label for="pwd" class="block text-sm/6 font-medium text-gray-100">Password</label>
             <div class="text-sm">
-              <button type="button" class="font-semibold text-orange-600 hover:text-orange-500">Show password</button>
+              <button type="button" class="font-semibold text-orange-600 hover:text-orange-500">Password dimenticata</button>
             </div>
           </div>
           <div class="mt-2 flex flex-col">
@@ -52,16 +52,26 @@
         </div>
 
         <div>
+          <div class="mt-2 flex items-center">
+            <input type="checkbox" id="remember-me" name="remember-me"
+                   class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded">
+            <label for="remember-me" class="ml-2 block text-sm text-gray-100">
+              Ricordami
+            </label>
+          </div>
+        </div>
+
+        <div>
           <button type="submit"
                   class="flex w-full justify-center rounded-md bg-orange-600/50 border-2 border-orange-600 transition-all duration-300 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
-            Sign in
+            Accedi
           </button>
         </div>
       </form>
 
       <p class="mt-10 text-center text-sm/6 text-gray-500">
-        Don't have an account? <a asp-action="Signup" class="font-semibold text-orange-600 hover:text-orange-500">Register
-          your account</a>
+        Non hai un account? <a asp-action="Signup" class="font-semibold text-orange-600 hover:text-orange-500">Registrati
+          </a>
       </p>
     </div>
   </div>
