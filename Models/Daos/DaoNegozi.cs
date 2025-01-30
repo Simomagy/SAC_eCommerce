@@ -8,41 +8,43 @@ namespace SAC_eCommerce.Models.Daos
         #region Inizializzazione
         private readonly Database _db;
         private readonly string _tabella;
-        public DaoNegozi(IConfiguration configuration)
+        private DaoNegozi(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
-            _tabella = "NEGOZI";
+            _tabella = configuration["tables.negozio"];
         }
         #endregion
 
-        public bool CreateRecord(Negozio negozio)
+        public bool CreateRecord(Entity entity)
         {
+            var negozio = (Negozio)entity;
             var query = $"INSERT INTO {_tabella} (Nome, Indirizzo, Citta, CAP, Provincia, Data_Apertura) " +
                         "VALUES (@Nome, @Indirizzo, @Citta, @CAP, @Provincia, @Data_Apertura)";
             var parameters = new Dictionary<string, object>
-                    {
-                        {"@Nome", negozio.Nome},
-                        {"@Indirizzo", negozio.Indirizzo},
-                        {"@Citta", negozio.Citta},
-                        {"@CAP", negozio.CAP},
-                        {"@Provincia", negozio.Provincia},
-                        {"@Data_Apertura", negozio.Data_Apertura}
-                    };
+                            {
+                                {"@Nome", negozio.Nome},
+                                {"@Indirizzo", negozio.Indirizzo},
+                                {"@Citta", negozio.Citta},
+                                {"@CAP", negozio.CAP},
+                                {"@Provincia", negozio.Provincia},
+                                {"@Data_Apertura", negozio.Data_Apertura}
+                            };
             return _db.UpdateDb(query, parameters);
         }
 
-        public bool UpdateRecord(Negozio negozio)
+        public bool UpdateRecord(Entity entity)
         {
+            var negozio = (Negozio)entity;
             var query = $"UPDATE {_tabella} SET Nome = @Nome, Indirizzo = @Indirizzo, Citta = @Citta, CAP = @CAP, Provincia = @Provincia, Data_Apertura = @Data_Apertura WHERE ID_Negozio = @ID_Negozio";
             var parameters = new Dictionary<string, object>
-                    {
-                        {"@Nome", negozio.Nome},
-                        {"@Indirizzo", negozio.Indirizzo},
-                        {"@Citta", negozio.Citta},
-                        {"@CAP", negozio.CAP},
-                        {"@Provincia", negozio.Provincia},
-                        {"@Data_Apertura", negozio.Data_Apertura}
-                    };
+                            {
+                                {"@Nome", negozio.Nome},
+                                {"@Indirizzo", negozio.Indirizzo},
+                                {"@Citta", negozio.Citta},
+                                {"@CAP", negozio.CAP},
+                                {"@Provincia", negozio.Provincia},
+                                {"@Data_Apertura", negozio.Data_Apertura},
+                            };
             return _db.UpdateDb(query, parameters);
         }
 
@@ -50,9 +52,9 @@ namespace SAC_eCommerce.Models.Daos
         {
             var query = $"DELETE FROM {_tabella} WHERE ID_Negozio = @ID_Negozio";
             var parameters = new Dictionary<string, object>
-                    {
-                        {"@ID_Negozio", id}
-                    };
+                            {
+                                {"@ID_Negozio", id}
+                            };
             return _db.UpdateDb(query, parameters);
         }
 
@@ -77,9 +79,9 @@ namespace SAC_eCommerce.Models.Daos
         {
             var query = $"SELECT * FROM {_tabella} WHERE ID_Negozio = @ID_Negozio";
             var parameters = new Dictionary<string, object>
-                    {
-                        {"@ID_Negozio", id}
-                    };
+                            {
+                                {"@ID_Negozio", id}
+                            };
             var result = _db.ReadDb(query, parameters);
             return result is { Count: > 0 };
         }
@@ -88,9 +90,9 @@ namespace SAC_eCommerce.Models.Daos
         {
             var query = $"SELECT * FROM {_tabella} WHERE ID_Negozio = @ID_Negozio";
             var parameters = new Dictionary<string, object>
-                    {
-                        {"@ID_Negozio", id}
-                    };
+                            {
+                                {"@ID_Negozio", id}
+                            };
             var result = _db.ReadDb(query, parameters);
             return result is { Count: > 0 };
         }

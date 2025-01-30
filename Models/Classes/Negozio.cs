@@ -11,5 +11,6 @@ namespace SAC_eCommerce.Models.Classes
         public string CAP { get; set; }
         public string Provincia { get; set; }
         public DateTime Data_Apertura { get; set; } = DateTime.Now;
+
     }
 }
