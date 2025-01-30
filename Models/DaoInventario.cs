@@ -20,14 +20,15 @@ public class DaoInventario
     {
         var parameters = new Dictionary<string, object>
         {
-            //{ "@prodotto", ((Inventario)entity.Prodotto.Id },
+            // TODO: Togliere il commento una volta implementata la classe
+            { "@prodotto", ((Inventario)entity.Prodotto.Id) },
             //{ "@negozio", ((Inventario)entity).Negozio.Id },
             { "@tipo_Locazione", ((Inventario)entity).Tipo_Locazione.Replace("'", "''") },
             { "@quantita", ((Inventario)entity).Quantita }
             
         };
         string query =
-            $"INSERT INTO {_tabella} (Prodotto, Negozio, Tipo_Locazione, Quantita) VALUES (@prodotto, @negozio, @tipo_locazione, @quantita)";
+            $"INSERT INTO {_tabella} (ID_Prodotto, ID_Negozio, Tipo_Locazione, Quantita) VALUES (@prodotto, @negozio, @tipo_locazione, @quantita)";
 
         return _db.UpdateDb(query, parameters);
     }
@@ -36,13 +37,14 @@ public class DaoInventario
     {
         var parameters = new Dictionary<string, object>
         {
-            //{ "@prodotto", ((Inventario)entity.Prodotto.Id },
+            // TODO: Togliere il commento una volta implementata la classe
+            { "@prodotto", ((Inventario)entity.Prodotto.Id) },
             //{ "@negozio", ((Inventario)entity).Negozio.Id },
             { "@tipo_Locazione", ((Inventario)entity).Tipo_Locazione.Replace("'", "''") },
             { "@quantita", ((Inventario)entity).Quantita }
         };
          string query =
-            $"UPDATE {_tabella} SET Prodotto = @prodotto, Negozio = @negozio, Tipo_Locazione = @Tipo_Locazione, Quantita = @quantita,  WHERE ID_Inventario = @Id";
+            $"UPDATE {_tabella} SET ID_Prodotto = @prodotto, ID_Negozio = @negozio, Tipo_Locazione = @Tipo_Locazione, Quantita = @quantita  WHERE ID_Inventario = @Id";
 
         return _db.UpdateDb(query, parameters);
     }
