@@ -1,5 +1,7 @@
 ﻿using MSSTU.DB.Utility;
-namespace SAC_eCommerce.Models
+using SAC_eCommerce.Models.Classes;
+
+namespace SAC_eCommerce.Models.Daos
 {
     public class DaoProdotti
     {

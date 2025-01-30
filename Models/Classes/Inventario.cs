@@ -1,6 +1,6 @@
 ﻿using MSSTU.DB.Utility;
 
-namespace SAC_eCommerce.Models;
+namespace SAC_eCommerce.Models.Classes;
 
 public class Inventario : Entity
 {

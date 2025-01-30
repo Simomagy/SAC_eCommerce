@@ -1,6 +1,7 @@
 ﻿using MSSTU.DB.Utility;
+using SAC_eCommerce.Models.Classes;
 
-namespace SAC_eCommerce.Models
+namespace SAC_eCommerce.Models.Daos
 {
     public class DaoUtenti
     {

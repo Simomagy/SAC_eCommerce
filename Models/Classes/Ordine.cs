@@ -1,5 +1,7 @@
-﻿namespace SAC_eCommerce.Models;
-using MSSTU.DB.Utility;
+﻿using MSSTU.DB.Utility;
+
+namespace SAC_eCommerce.Models.Classes;
+
 public class Ordine : Entity
 {
     public DateTime Data { get; set; }

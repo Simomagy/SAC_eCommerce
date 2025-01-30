@@ -1,5 +1,8 @@
-﻿namespace SAC_eCommerce.Models;
-using MSSTU.DB.Utility;
+﻿using MSSTU.DB.Utility;
+using SAC_eCommerce.Models.Classes;
+
+namespace SAC_eCommerce.Models.Daos;
+
 public class DaoInventario
 {
     #region Inizializzazione
