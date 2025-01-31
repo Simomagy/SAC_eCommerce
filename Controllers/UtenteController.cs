@@ -8,10 +8,12 @@ namespace SAC_eCommerce.Controllers;
 public class UtenteController : Controller
 {
     private readonly DaoProdotti _daoProdotti;
+    private readonly DaoOrdini _daoOrdini;
 
     public UtenteController(IConfiguration configuration)
     {
         _daoProdotti = new DaoProdotti(configuration);
+        _daoOrdini = new DaoOrdini(configuration);
     }
 
     public IActionResult Profilo()
@@ -19,6 +21,7 @@ public class UtenteController : Controller
         var userJson = HttpContext.Session.GetString("LoggedUser");
         if (userJson != null)
         {
+            var ordini = _daoOrdini.FindOrdersByUser(JsonConvert.DeserializeObject<Utente>(userJson).Email);
             var user = JsonConvert.DeserializeObject<Utente>(userJson);
             return View(user);
         }
