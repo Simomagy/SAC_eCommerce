@@ -26,24 +26,31 @@ public class AuthController : Controller
         return View();
     }
 
-    public IActionResult AutenticaUtente(Dictionary<string, string> parameters)
-    {
-        var email = parameters["email"];
-        var password = parameters["password"];
+public IActionResult AutenticaUtente(Dictionary<string, string> parameters)
+{
+    var email = parameters["email"];
+    var password = parameters["password"];
+    var rememberMe = parameters.ContainsKey("rememberMe") && parameters["rememberMe"] == "on";
 
-        var userExists = _daoUtenti.UserExists(email, password);
-        if (userExists)
+    var userExists = _daoUtenti.UserExists(email, password);
+    if (userExists)
+    {
+        var user = _daoUtenti.FindUser(email);
+        _loggedUser = user;
+        _loginAttempts = 0;
+
+        HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
+        if (rememberMe)
         {
-            var user = _daoUtenti.FindUser(email);
-            _loggedUser = user;
-            _loginAttempts = 0;
-            HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
-            return RedirectToAction("Index", "Home");
+            HttpContext.Session.Set("SessionTimeout", BitConverter.GetBytes(TimeSpan.FromDays(30).Ticks));
         }
 
-        _loginAttempts++;
-        return RedirectToAction("Login");
+        return RedirectToAction("Index", "Home");
     }
+
+    _loginAttempts++;
+    return RedirectToAction("Login");
+}
 
     [HttpPost]
     public IActionResult AggiungiUtente(Dictionary<string, string> parameters)
