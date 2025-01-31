@@ -7,7 +7,7 @@
 }
 
 <nav
-    class="w-1/2 p-4 flex gap-4 justify-between items-center bg-zinc-950/50 z-50 absolute top-0 right-0 my-8 rounded-md border-2 border-primary-400/20 shadow-xl">
+    class="w-fit p-4 sticky flex gap-4 justify-between items-center backdrop-blur-md bg-zinc-950/50 z-50 my-8 rounded-md border-2 border-primary-400/20 shadow-xl shadow-zinc-950">
     <!-- logo -->
     <div class="w-fit flex-shrink-0 flex items-center gap-4">
         <img class="h-8 md:h-10" src="~/assets/base-light.png" alt="">
@@ -37,7 +37,7 @@
                 </button>
                 <!-- Dropdown menu -->
                 <div
-                    class="hidden absolute top-[100%] backdrop:blur-md m-0 p-0 overflow-hidden z-50 max-w-sm text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
+                    class="hidden absolute top-[100%] backdrop-blur-md m-0 p-0 overflow-hidden z-50 max-w-sm text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
                     id="appsDropdown">
                     <div class="block py-2 px-4 text-base font-medium text-center text-zinc-50 bg-zinc-700">Apps</div>
                     <div class="grid grid-cols-3 gap-4 p-4">
@@ -95,14 +95,22 @@
             <li class="ml-2 lg:ml-4 relative inline-block">
                 @if (isLogged)
                 {
-                    <a id="userButton" class="base-button">
+                    <a id="userButton" class="base-button overflow-hidden whitespace-nowrap text-ellipsis"
+                       style="max-width: 150px;">
                         <i class="ti ti-user text-xl"></i>
-                        @Model.Nome
+                        @if (Model.Nome == "Non specificato")
+                        {
+                            <span class="text-sm overflow-hidden whitespace-nowrap text-ellipsis">Account</span>
+                        }
+                        else
+                        {
+                            <span class="text-sm overflow-hidden whitespace-nowrap text-ellipsis">@Model.Nome</span>
+                        }
                     </a>
                     <div
-                        class="hidden backdrop-blur-sm m-0 p-0 absolute z-50 w-56 text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
+                        class="hidden backdrop-blur-md m-0 p-0 absolute z-50 w-fit whitespace-nowrap text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
                         id="userDropdown">
-                        <div class="py-3 px-4">
+                        <div class="py-3 px-4 w-fit">
                             <span
                                 class="block text-sm font-semibold text-gray-900 dark:text-white">@Model.Nome @Model.Cognome</span>
                             <span class="block text-sm text-gray-500 truncate dark:text-gray-400">@Model.Email</span>

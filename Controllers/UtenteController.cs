@@ -16,9 +16,9 @@ public class UtenteController : Controller
 
     public IActionResult Profilo()
     {
-        if (TempData["LoggedUser"] != null)
+        var userJson = HttpContext.Session.GetString("LoggedUser");
+        if (userJson != null)
         {
-            var userJson = TempData["LoggedUser"].ToString();
             var user = JsonConvert.DeserializeObject<Utente>(userJson);
             return View(user);
         }
@@ -29,15 +29,14 @@ public class UtenteController : Controller
     public IActionResult Prodotti()
     {
         var prodotti = _daoProdotti.GetRecords();
-        Utente user = null;
 
-        if (TempData["LoggedUser"] != null)
+        var userJson = HttpContext.Session.GetString("LoggedUser");
+        if (userJson != null)
         {
-            var userJson = TempData["LoggedUser"].ToString();
-            user = JsonConvert.DeserializeObject<Utente>(userJson);
+            var user = JsonConvert.DeserializeObject<Utente>(userJson);
+            ViewBag.User = user;
         }
 
-        ViewBag.User = user;
         return View(prodotti);
     }
 }

@@ -17,12 +17,13 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        if (TempData["LoggedUser"] != null)
+        var userJson = HttpContext.Session.GetString("LoggedUser");
+        if (userJson != null)
         {
-            var userJson = TempData["LoggedUser"].ToString();
             var user = JsonConvert.DeserializeObject<Utente>(userJson);
             ViewBag.User = user;
         }
+
         return View();
     }
 

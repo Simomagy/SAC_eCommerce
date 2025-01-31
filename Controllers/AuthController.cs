@@ -36,7 +36,8 @@ public class AuthController : Controller
         {
             var user = _daoUtenti.FindUser(email);
             _loggedUser = user;
-            TempData["LoggedUser"] = JsonConvert.SerializeObject(user);
+            _loginAttempts = 0;
+            HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
             return RedirectToAction("Index", "Home");
         }
 
@@ -62,7 +63,7 @@ public class AuthController : Controller
         user.Nome = "Non specificato";
         user.Cognome = "Non specificato";
         user.Points = 0;
-        user.Card_Number = "Non aperta";
+        user.Card_Number = Math.Abs(email.GetHashCode()).ToString();
 
         if (email.Contains("@dipendente.techretailspa.it"))
         {
@@ -79,7 +80,13 @@ public class AuthController : Controller
         _daoUtenti.CreateRecord(user);
         _loggedUser = user;
         TempData["LoggedUser"] = JsonConvert.SerializeObject(user);
-        return View("../Home/Index", user);
+        // Chiama la action AutenticaUtente
+        var parametersLogin = new Dictionary<string, string>
+        {
+            { "email", email },
+            { "password", password }
+        };
+        return AutenticaUtente(parametersLogin);
     }
 
     public IActionResult Logout()
