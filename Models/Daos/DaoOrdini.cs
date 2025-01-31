@@ -10,15 +10,18 @@ public class DaoOrdini
 
     private readonly Database _db;
     private readonly string? _tabella;
+    private readonly string? _tabella2;
 
     public DaoOrdini(IConfiguration configuration)
     {
         _db = new Database(configuration["db_name"], configuration["server_db"]);
-        _tabella = configuration["tables.ordini"];
+        _tabella = configuration["tables:ordini"];
+        _tabella2 = configuration["tables:utenti"];
     }
 
     #endregion
-    
+
+    #region CRUD
     public bool CreateRecord(Entity entity)
     {
         var parameters = new Dictionary<string, object>
@@ -37,6 +40,26 @@ public class DaoOrdini
 
         return _db.UpdateDb(query, parameters);
     }
+
+
+    public List<Ordine> GetRecords()
+    {
+        var query = $"SELECT * FROM {_tabella}";
+        List<Ordine> ordini = [];
+        var fullResponse = _db.ReadDb(query);
+        if (fullResponse == null)
+            return ordini;
+
+        foreach (var singleResponse in fullResponse)
+        {
+            var or = new Ordine();
+            or.TypeSort(singleResponse);
+
+            ordini.Add(or);
+        }
+        return ordini;
+    }
+
 
     public bool UpdateRecord(Entity entity)
     {
@@ -73,5 +96,29 @@ public class DaoOrdini
         Entity entity = new Ordine();
         entity.TypeSort(singleResponse);
         return entity;
+    }
+    #endregion
+
+    public List<Ordine>? FindOrdersByUser(string email)
+    {
+        string query = $"SELECT * " +
+                       $"FROM {_tabella} JOIN {_tabella2} " +
+                       $"ON {_tabella}.id_cliente = {_tabella2}.id_utente " +
+                       $"WHERE {_tabella2}.email = '{email}'; ";
+
+        List<Ordine> ordini = [];
+
+        var fullResponse = _db.ReadDb(query);
+        if (fullResponse == null)
+            return ordini;
+
+        foreach (var singleResponse in fullResponse)
+        {
+            var or = new Ordine();
+            or.TypeSort(singleResponse);
+
+            ordini.Add(or);
+        }
+        return ordini;
     }
 }
