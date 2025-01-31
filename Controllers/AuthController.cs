@@ -26,31 +26,29 @@ public class AuthController : Controller
         return View();
     }
 
-public IActionResult AutenticaUtente(Dictionary<string, string> parameters)
-{
-    var email = parameters["email"];
-    var password = parameters["password"];
-    var rememberMe = parameters.ContainsKey("rememberMe") && parameters["rememberMe"] == "on";
-
-    var userExists = _daoUtenti.UserExists(email, password);
-    if (userExists)
+    public IActionResult AutenticaUtente(Dictionary<string, string> parameters)
     {
-        var user = _daoUtenti.FindUser(email);
-        _loggedUser = user;
-        _loginAttempts = 0;
+        var email = parameters["email"];
+        var password = parameters["password"];
+        var rememberMe = parameters.ContainsKey("rememberMe") && parameters["rememberMe"] == "on";
 
-        HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
-        if (rememberMe)
+        var userExists = _daoUtenti.UserExists(email, password);
+        if (userExists)
         {
-            HttpContext.Session.Set("SessionTimeout", BitConverter.GetBytes(TimeSpan.FromDays(30).Ticks));
+            var user = _daoUtenti.FindUser(email);
+            _loggedUser = user;
+            _loginAttempts = 0;
+
+            HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(user));
+            if (rememberMe)
+                HttpContext.Session.Set("SessionTimeout", BitConverter.GetBytes(TimeSpan.FromDays(30).Ticks));
+
+            return RedirectToAction("Index", "Home");
         }
 
-        return RedirectToAction("Index", "Home");
+        _loginAttempts++;
+        return RedirectToAction("Login");
     }
-
-    _loginAttempts++;
-    return RedirectToAction("Login");
-}
 
     [HttpPost]
     public IActionResult AggiungiUtente(Dictionary<string, string> parameters)
@@ -67,8 +65,6 @@ public IActionResult AutenticaUtente(Dictionary<string, string> parameters)
         user.TypeSort(parameters);
 
         // Dati di default per evitare nulli
-        user.Nome = "Non specificato";
-        user.Cognome = "Non specificato";
         user.Points = 0;
         user.Card_Number = Math.Abs(email.GetHashCode()).ToString();
 

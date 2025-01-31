@@ -1,0 +1,126 @@
+﻿@model SAC_eCommerce.Models.Classes.Utente
+
+@{
+    ViewBag.Title = "Impostazioni";
+    var loggedUser = Model;
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title - TechRetail</title>
+</head>
+<body class="bg-zinc-950 text-white flex flex-col justify-center items-center">
+@await Component.InvokeAsync("Navbar", new { user = loggedUser })
+<div class="relative p-4 w-full h-full md:h-auto">
+    <!-- Modal content -->
+    <div class="relative p-4  rounded-lg shadow sm:p-5">
+        <!-- Modal header -->
+        <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 ">
+            <h3 class="text-lg font-semibold text-white">
+                Impostazioni profilo
+            </h3>
+        </div>
+        <!-- Modal body -->
+        <form asp-action="ModificaUtente" method="post" onsubmit="return ValidaForm()">
+            <div class="grid gap-4 mb-4 sm:grid-cols-2 h-1/2">
+                <div>
+                    <label for="nome" class="block mb-2 text-sm font-medium text-white">Nome</label>
+                    <input type="text" name="nome" id="nome" value="@Model.Nome"
+                           class="base-input"
+                           placeholder="@Model.Nome">
+                    <p id="nomeError"
+                       class="opacity-0 text-xs text-zinc-50 bg-danger-500/30 border-2 border-danger-500 p-2 rounded-md my-4">
+                        Campo obbligatorio.</p>
+                </div>
+                <div>
+                    <label for="cognome"
+                           class="block mb-2 text-sm font-medium text-white">Cognome</label>
+                    <input type="text" name="cognome" id="cognome" value="@Model.Cognome"
+                           class="base-input"
+                           placeholder="@Model.Cognome">
+                    <p id="cognomeError"
+                       class="opacity-0 text-xs text-zinc-50 bg-danger-500/30 border-2 border-danger-500 p-2 rounded-md my-4">
+                        Campo obbligatorio.</p>
+                </div>
+                <div>
+                    <label for="email" class="block mb-2 text-sm font-medium text-white">Email</label>
+                    @if (Model.Email.Contains("dipendente.techretailspa.it"))
+                    {
+                        <input type="email" name="email" id="email" readonly value="@Model.Email"
+                               class="block cursor-not-allowed w-full rounded-t-md bg-zinc-900/60 px-3 py-1.5 text-base text-zinc-700 outline-none sm:text-sm/6"
+                               placeholder="@Model.Email">
+                        <p class="text-xs text-gray-400 bg-zinc-900/60 p-1 rounded-b-md">Chiedi a un manager di
+                            modificare la tua
+                            Email aziendale</p>
+                    }
+                    else
+                    {
+                        <input type="email" name="email" id="email" value="@Model.Email"
+                               class="base-input"
+                               placeholder="@Model.Email">
+                        <p id="emailError"
+                           class="opacity-0 text-xs text-zinc-50 bg-danger-500/30 border-2 border-danger-500 p-2 rounded-md my-4">
+                            Email non valida.</p>
+                    }
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label for="password" class="block mb-2 text-sm font-medium text-white">Password</label>
+                        <div class="flex">
+                            <input type="password" name="password" id="password"
+                                   class="base-input"
+                                   placeholder="Nuova password">
+                            <div class="flex items-center text-sm leading-5">
+                                <button type="button" onclick="togglePassword('password')"
+                                        class="text-gray-500 focus:outline-none hover:text-orange-600 flex justify-center items-center w-10">
+                                    <i id="togglePasswordIcon" class="ti ti-eye text-xl text-center"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p id="pwdError"
+                           class="opacity-0 text-xs text-zinc-50 bg-danger-500/30 border-2 border-danger-500 p-2 rounded-md my-4">
+                            La password deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una
+                            lettera minuscola, un numero e un carattere speciale.
+                        </p>
+                    </div>
+                    <div>
+                        <label for="confirmPassword"
+                               class="block mb-2 text-sm font-medium text-white">Conferma password</label>
+                        <div class="flex">
+                            <input type="password" name="confirmPassword" id="confirmPassword"
+                                   class="base-input"
+                                   placeholder="Conferma password">
+                            <div class="flex items center text-sm leading-5">
+                                <button type="button" onclick="toggleConfirmPassword('confirmPassword')"
+                                        class="text-gray-500 focus:outline-none hover:text-orange-600 flex justify-center items-center w-10">
+                                    <i id="toggleConfPasswordIcon" class="ti ti-eye text-xl text-center"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p id="confirmPwdError"
+                           class="opacity-0 text-xs text-zinc-50 bg-danger-500/30 border-2 border-danger-500 p-2 rounded-md my-4">
+                            Le password non coincidono.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-end space-x-4 justify-end">
+                <button type="submit"
+                        class="flex w-fit justify-center items-center gap-2 rounded-md bg-success-600/50 border-2 border-success-600 transition-all duration-300 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-success-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-success-600">
+                    <i class="ti ti-check"></i>
+                    Conferma modifiche
+                </button>
+                <a asp-action="Profilo"
+                   class="flex w-fit justify-center items-center gap-2 rounded-md bg-danger-600/50 border-2 border-danger-600 transition-all duration-300 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-danger-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger-600">
+                    <i class="ti ti-x"></i>
+                    Annulla modifiche
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script src="~/js/Utente/Impostazioni.js"></script>
+</html>

@@ -60,9 +60,8 @@ namespace SAC_eCommerce.Models.Daos
         }
 
 
-        public bool UpdateRecord(Entity entity)
+        public bool UpdateRecord(Utente utente)
         {
-            var utente = (Utente)entity;
             var pwd = utente.Password;
             var parametri = new Dictionary<string, object>
             {

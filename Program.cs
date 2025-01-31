@@ -10,6 +10,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromDays(365); // Sessione di default di un anno
     options.Cookie.HttpOnly = true; // Cookie accessibile solo dal server
     options.Cookie.IsEssential = true; // Cookie essenziale (non richiede consenso)
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Cookie sicuro
+    options.Cookie.MaxAge = TimeSpan.FromDays(365); // Cookie valido per un anno
 });
 
 var app = builder.Build();

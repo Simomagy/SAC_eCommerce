@@ -6,4 +6,13 @@
     .base-button {
         @apply bg-zinc-700/50 cursor-pointer rounded-md px-3 py-1 text-sm flex justify-center border-2 border-transparent items-center gap-2 text-zinc-50 font-semibold hover:text-zinc-50 hover:border-zinc-500 hover:bg-zinc-600/60 transition-all duration-300;
     }
+
+    .base-input {
+        @apply block w-full rounded-md bg-zinc-900/60 px-3 py-1.5 text-base text-gray-100 outline outline-1 -outline-offset-1 outline-gray-300/20 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600 sm:text-sm/6;
+    }
+}
+
+input {
+    --tw-ring-shadow: 0 0 #000 !important;
+    @apply ring-offset-0 ring-0
 }

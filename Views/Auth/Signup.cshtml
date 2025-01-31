@@ -21,6 +21,18 @@
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" asp-action="AggiungiUtente" onsubmit="return valida()" method="POST">
         <div>
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="field">
+              <label for="name" class="text-title text-sm">Nome</label>
+              <input type="text" required name="nome" id="name"
+                     class="block w-full rounded-md bg-background-400/20 px-3 py-1.5 text-base text-gray-100 outline outline-1 -outline-offset-1 outline-gray-300/20 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600 sm:text-sm/6"/>
+            </div>
+            <div class="field">
+              <label for="lname" class="text-title text-sm">Cognome</label>
+              <input type="text" required name="cognome" id="lname"
+                     class="block w-full rounded-md bg-background-400/20 px-3 py-1.5 text-base text-gray-100 outline outline-1 -outline-offset-1 outline-gray-300/20 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600 sm:text-sm/6"/>
+            </div>
+          </div>
           <label for="email" class="block text-sm/6 font-medium text-gray-100">Email</label>
           <div class="mt-2">
             <input type="text" name="email" id="email" autocomplete="off"
