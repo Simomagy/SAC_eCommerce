@@ -2,11 +2,11 @@
 
 ## UtenteController
 
-* [ ]  Profilo (informazioni utente non modificabili + lista acquisti)
-* [ ]  Prodotti (lista prodotti)
+* [X]  Profilo (informazioni utente non modificabili + lista acquisti)
+* [X]  Prodotti (lista prodotti)
 * [ ]  AggiungiAlCarrello (aggiunge un prodotto al carrello)
-* [ ]  Impostazioni (informazioni utente modificabili => nome, cognome, email, password, eliminazione account)
-* [ ]  AggiornaUtente (prende i dati modificati dal form delle impostazioni sopra e modifica l'utente nel database)
+* [X]  Impostazioni (informazioni utente modificabili => nome, cognome, email, password, eliminazione account)
+* [X]  AggiornaUtente (prende i dati modificati dal form delle impostazioni sopra e modifica l'utente nel database)
 
 ## AuthController
 

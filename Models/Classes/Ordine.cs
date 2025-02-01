@@ -9,8 +9,7 @@ public class Ordine : Entity
     public float Totale { get; set; }
     public string Stato { get; set; }
 
-    // TODO: Toglie il commento quando la classe Cliente è stata implementata
-    // public Cliente cliente { get; set; }
+    public Utente Utente { get; set; }
     public int ID_LocazioneRitiro { get; set; }
     
     

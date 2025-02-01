@@ -41,20 +41,21 @@ namespace SAC_eCommerce.Models.Daos
             return response;
         }
 
-        public List<Utente> GetRecords()
+        public List<Entity> GetRecords()
         {
             var query = $"SELECT * FROM {_tabella}";
-            List<Utente> utenti = [];
+            List<Entity> utenti = [];
             var fullResponse = _db.ReadDb(query);
             if (fullResponse == null)
                 return utenti;
 
             foreach (var singleResponse in fullResponse)
             {
-                var ut = new Utente();
-                ut.TypeSort(singleResponse);
+                Entity entity = new Utente();
+                entity.TypeSort(singleResponse);
+                entity.Id = Convert.ToInt32(singleResponse["id_utente"]);
 
-                utenti.Add(ut);
+                utenti.Add(entity);
             }
             return utenti;
         }
@@ -103,6 +104,7 @@ namespace SAC_eCommerce.Models.Daos
 
             var utente = new Utente();
             utente.TypeSort(response);
+            utente.Id = Convert.ToInt32(response["id_utente"]);
 
             return utente;
         }

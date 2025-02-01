@@ -24,11 +24,11 @@
             </h3>
         </div>
         <!-- Modal body -->
-        <form asp-action="ModificaUtente" method="post" onsubmit="return ValidaForm()">
+        <form asp-action="ModificaUtente" method="post">
             <div class="grid gap-4 mb-4 sm:grid-cols-2 h-1/2">
                 <div>
                     <label for="nome" class="block mb-2 text-sm font-medium text-white">Nome</label>
-                    <input type="text" name="nome" id="nome" value="@Model.Nome"
+                    <input type="text" name="nome" id="nome" value="@Model.Id"
                            class="base-input"
                            placeholder="@Model.Nome">
                     <p id="nomeError"
@@ -74,7 +74,7 @@
                                    class="base-input"
                                    placeholder="Nuova password">
                             <div class="flex items-center text-sm leading-5">
-                                <button type="button" onclick="togglePassword('password')"
+                                <button type="button"
                                         class="text-gray-500 focus:outline-none hover:text-orange-600 flex justify-center items-center w-10">
                                     <i id="togglePasswordIcon" class="ti ti-eye text-xl text-center"></i>
                                 </button>
@@ -94,7 +94,7 @@
                                    class="base-input"
                                    placeholder="Conferma password">
                             <div class="flex items center text-sm leading-5">
-                                <button type="button" onclick="toggleConfirmPassword('confirmPassword')"
+                                <button type="button"
                                         class="text-gray-500 focus:outline-none hover:text-orange-600 flex justify-center items-center w-10">
                                     <i id="toggleConfPasswordIcon" class="ti ti-eye text-xl text-center"></i>
                                 </button>

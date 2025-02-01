@@ -34,14 +34,14 @@ public class UtenteController : Controller
 
     public IActionResult Prodotti()
     {
-        var prodotti = _daoProdotti.GetRecords();
+        var entities = _daoProdotti.GetRecords();
+        var prodotti = entities.Cast<Prodotto>().ToList();
 
         var userJson = HttpContext.Session.GetString("LoggedUser");
-        if (userJson != null)
-        {
-            var user = JsonConvert.DeserializeObject<Utente>(userJson);
-            ViewBag.User = user;
-        }
+        if (userJson == null) return View(prodotti);
+
+        var user = JsonConvert.DeserializeObject<Utente>(userJson);
+        ViewBag.User = user;
 
         return View(prodotti);
     }
