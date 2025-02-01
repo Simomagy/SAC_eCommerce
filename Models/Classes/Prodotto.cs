@@ -11,6 +11,7 @@ namespace SAC_eCommerce.Models.Classes
         public double Prezzo { get; set; }
         public string Categoria { get; set; }
         public bool Stato { get; set; }
+        public int Quantita { get; set; } = 1;
         public DateTime Data_Inserimento { get; set; }
     }
 }

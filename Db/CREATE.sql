@@ -76,3 +76,11 @@ CREATE TABLE INVENTARI (
                             FOREIGN KEY (ID_Locazione) REFERENCES NEGOZI(ID_Negozio)
 
 );
+
+-- Eliminazione colonna ID_Locazione_Ritiro da ORDINI
+ALTER TABLE ORDINI
+    DROP COLUMN ID_Locazione_Ritiro;
+
+-- Aggiunta colonna Prodotti a ORDINI (per salvare i prodotti dell'ordine in formato JSON)
+alter table ORDINI
+    add Prodotti nvarchar(max) default '{}';

@@ -90,7 +90,7 @@ public class UtenteController : Controller
                 Totale = prodotto.Prezzo,
                 Stato = "In Elaborazione",
                 Utente = user,
-                ID_LocazioneRitiro = 1
+                Prodotti = new List<Prodotto> { prodotto }
             };
             _daoOrdini.CreateRecord(ordine);
             return RedirectToAction("Prodotti");

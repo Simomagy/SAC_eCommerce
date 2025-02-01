@@ -96,3 +96,20 @@ VALUES
 (37, 18, 2, 'Negozio', 5),
 (38, 19, 1, 'Magazzino', 30),
 (39, 19, 3, 'Negozio', 10);
+
+-- Inserimenti per la tabella ORDINE, modifica della colonna Prodotti (formato JSON uguale alla struttura della tabella PRODOTTI)
+UPDATE ORDINI
+SET Prodotti = '[{"ID_Prodotto": 1, "Quantita": 1}, {"ID_Prodotto": 2, "Quantita": 3}]'
+WHERE ID_Ordine = 1001;
+
+UPDATE ORDINI
+SET Prodotti = '[{"ID_Prodotto": 7, "Quantita": 2}]'
+WHERE ID_Ordine = 1002;
+
+UPDATE ORDINI
+SET Prodotti = '[{"ID_Prodotto": 4, "Quantita": 1}, {"ID_Prodotto": 6, "Quantita": 2}]'
+WHERE ID_Ordine = 1003;
+
+UPDATE ORDINI
+SET Prodotti = '[{"ID_Prodotto": 5, "Quantita": 1}, {"ID_Prodotto": 8, "Quantita": 5}]'
+WHERE ID_Ordine = 1004;

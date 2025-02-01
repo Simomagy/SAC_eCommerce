@@ -10,7 +10,5 @@ public class Ordine : Entity
     public string Stato { get; set; }
 
     public Utente Utente { get; set; }
-    public int ID_LocazioneRitiro { get; set; }
-    
-    
+    public List<Prodotto> Prodotti { get; set; }
 }

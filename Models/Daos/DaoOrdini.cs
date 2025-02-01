@@ -1,51 +1,80 @@
 ﻿using MSSTU.DB.Utility;
+using Newtonsoft.Json;
 using SAC_eCommerce.Models.Classes;
-
 namespace SAC_eCommerce.Models.Daos;
 
-public class DaoOrdini 
+internal class DaoOrdini
 {
-
     #region Inizializzazione
 
     private readonly Database _db;
-    private readonly string? _tabella;
-    private readonly string? _tabella2;
+    private readonly string? _tabellaOrdini;
+    private readonly string? _tabellaUtenti;
+    private readonly string? _tabellaProdotti;
 
     public DaoOrdini(IConfiguration configuration)
     {
         _db = new Database(configuration["db_name"], configuration["server_db"]);
-        _tabella = configuration["tables:ordini"];
-        _tabella2 = configuration["tables:utenti"];
+        _tabellaOrdini = configuration["tables:ordini"];
+        _tabellaUtenti = configuration["tables:utenti"];
+        _tabellaProdotti = configuration["tables:prodotti"];
     }
 
     #endregion
 
     #region CRUD
+
+    private List<Prodotto> GetDetailedProdottiList(string prodottiJson)
+    {
+        var prodottiList = JsonConvert.DeserializeObject<List<Dictionary<string, int>>>(prodottiJson);
+        var detailedProdottiList = new List<Prodotto>();
+
+        foreach (var prodottoDict in prodottiList)
+        {
+            var idProdotto = prodottoDict["ID_Prodotto"];
+            var quantita = prodottoDict["Quantita"];
+
+            var queryProdotto = $"SELECT * FROM {_tabellaProdotti} WHERE id_prodotto = @IdProdotto";
+            var parametersProdotto = new Dictionary<string, object> { { "@IdProdotto", idProdotto } };
+            var singleResponseProdotto = _db.ReadOneDb(queryProdotto, parametersProdotto);
+
+            if (singleResponseProdotto != null)
+            {
+                var detailedProdotto = new Prodotto();
+                detailedProdotto.TypeSort(singleResponseProdotto);
+                detailedProdotto.Id = Convert.ToInt32(singleResponseProdotto["id_prodotto"]);
+                detailedProdotto.Quantita = quantita;
+
+                detailedProdottiList.Add(detailedProdotto);
+            }
+        }
+
+        return detailedProdottiList;
+    }
+
     public bool CreateRecord(Entity entity)
     {
+        var ordine = (Ordine)entity;
         var parameters = new Dictionary<string, object>
         {
-            { "@data", ((Ordine)entity).Data },
-            { "@tipoOrdine", ((Ordine)entity).Tipo_Ordine.Replace("'", "''") },
-            { "@totale", ((Ordine)entity).Totale },
-            { "@stato", ((Ordine)entity).Stato.Replace("'", "''") },
-            // TODO: Toglie il commento quando la classe Cliente è stata implementata
-            // { "@id_Cliente", ((Ordine)entity).Cliente.Id },
-            { "@id_LocazioneRitiro", ((Ordine)entity).ID_LocazioneRitiro }
-            
+            { "@data", ordine.Data },
+            { "@tipoOrdine", ordine.Tipo_Ordine.Replace("'", "''") },
+            { "@totale", ordine.Totale },
+            { "@stato", ordine.Stato.Replace("'", "''") },
+            { "@prodotti", JsonConvert.SerializeObject(ordine.Prodotti).Replace("'", "''") },
+            { "@id_Cliente", ordine.Utente.Id }
         };
-        string query =
-            $"INSERT INTO {_tabella} (Data, Tipo_Ordine, Totale, Stato, Cliente, ID_LocazioneRitiro) VALUES (@data, @tipoOrdine, @totale, @stato, @id_Cliente, @id_LocazioneRitiro)";
+        var query =
+            $"INSERT INTO {_tabellaOrdini} (Data, Tipo_Ordine, Totale, Stato, Prodotti, Cliente) VALUES (@data, @tipoOrdine, @totale, @stato, @prodotti, @id_Cliente)";
 
         return _db.UpdateDb(query, parameters);
     }
 
-
     public List<Ordine> GetRecords()
     {
-        var query = $"SELECT * FROM {_tabella} JOIN {_tabella2} ON {_tabella}.id_cliente = {_tabella2}.id_utente";
-        List<Ordine> ordini = [];
+        var query =
+            $"SELECT * FROM {_tabellaOrdini} JOIN {_tabellaUtenti} ON {_tabellaOrdini}.id_cliente = {_tabellaUtenti}.id_utente";
+        var ordini = new List<Ordine>();
         var fullResponse = _db.ReadDb(query);
         if (fullResponse == null)
             return ordini;
@@ -59,43 +88,52 @@ public class DaoOrdini
             ordine.Utente.TypeSort(singleResponse);
             ordine.Utente.Id = Convert.ToInt32(singleResponse["id_utente"]);
 
+            var prodottiJson = singleResponse["prodotti"].ToString();
+            ordine.Prodotti = GetDetailedProdottiList(prodottiJson);
+
             ordini.Add(ordine);
         }
+
         return ordini;
     }
 
-
     public bool UpdateRecord(Entity entity)
     {
+        var ordine = (Ordine)entity;
         var parameters = new Dictionary<string, object>
         {
-            { "@data", ((Ordine)entity).Data },
-            { "@tipoOrdine", ((Ordine)entity).Tipo_Ordine.Replace("'", "''") },
-            { "@totale", ((Ordine)entity).Totale },
-            { "@stato", ((Ordine)entity).Stato.Replace("'", "''") },
-            { "@id_Cliente", ((Ordine)entity).Utente.Id },
-            { "@id_LocazioneRitiro", ((Ordine)entity).ID_LocazioneRitiro }
+            { "@data", ordine.Data },
+            { "@tipoOrdine", ordine.Tipo_Ordine.Replace("'", "''") },
+            { "@totale", ordine.Totale },
+            { "@stato", ordine.Stato.Replace("'", "''") },
+            {
+                "@prodotti",
+                JsonConvert.SerializeObject(ordine.Prodotti.Select(p => new { p.Id, p.Quantita }).ToList())
+                    .Replace("'", "''")
+            },
+            { "@id_Cliente", ordine.Utente.Id }
         };
-         string query =
-            $"UPDATE {_tabella} SET Data = @data, Tipo_Ordine = @tipoOrdine, Totale = @totale, Stato = @stato, Cliente = @id_Cliente, LocazioneRitiro = @id_LocazioneRitiro WHERE ID_Ordine = @Id";
-
+        var query =
+            $"UPDATE {_tabellaOrdini} SET Data = @data, Tipo_Ordine = @tipoOrdine, Totale = @totale, Stato = @stato, Prodotti = @prodotti, Cliente = @id_Cliente WHERE ID_Ordine = @Id";
         return _db.UpdateDb(query, parameters);
     }
 
     public bool DeleteRecord(int recordId)
     {
-        string query = $"DELETE FROM {_tabella} WHERE ID_Ordine = @Id";
+        var query = $"DELETE FROM {_tabellaOrdini} WHERE ID_Ordine = @Id";
         var parameters = new Dictionary<string, object> { { "@Id", recordId } };
         return _db.UpdateDb(query, parameters);
     }
 
     public Ordine? FindRecord(int recordId)
     {
-        string query = $"SELECT * FROM {_tabella} JOIN {_tabella2} ON {_tabella}.id_cliente = {_tabella2}.id_utente WHERE ID_Ordine = @Id";
+        var query =
+            $"SELECT * FROM {_tabellaOrdini} JOIN {_tabellaUtenti} ON {_tabellaOrdini}.id_cliente = {_tabellaUtenti}.id_utente WHERE ID_Ordine = @Id";
         var parameters = new Dictionary<string, object> { { "@Id", recordId } };
         var singleResponse = _db.ReadOneDb(query, parameters);
         if (singleResponse == null)
             return null;
+
         var ordine = new Ordine();
         ordine.TypeSort(singleResponse);
         ordine.Id = Convert.ToInt32(singleResponse["id_ordine"]);
@@ -103,20 +141,23 @@ public class DaoOrdini
         ordine.Utente.TypeSort(singleResponse);
         ordine.Utente.Id = Convert.ToInt32(singleResponse["id_utente"]);
 
+        var prodottiJson = singleResponse["prodotti"].ToString();
+        ordine.Prodotti = GetDetailedProdottiList(prodottiJson);
+
         return ordine;
     }
-    #endregion
 
     public List<Ordine>? FindOrdersByUser(string email)
     {
-        string query = $"SELECT * " +
-                       $"FROM {_tabella} JOIN {_tabella2} " +
-                       $"ON {_tabella}.id_cliente = {_tabella2}.id_utente " +
-                       $"WHERE {_tabella2}.email = '{email}'; ";
+        var query = $"SELECT * " +
+                    $"FROM {_tabellaOrdini} JOIN {_tabellaUtenti} " +
+                    $"ON {_tabellaOrdini}.id_cliente = {_tabellaUtenti}.id_utente " +
+                    $"WHERE {_tabellaUtenti}.email = @Email";
 
-        List<Ordine> ordini = [];
+        var ordini = new List<Ordine>();
+        var parameters = new Dictionary<string, object> { { "@Email", email } };
 
-        var fullResponse = _db.ReadDb(query);
+        var fullResponse = _db.ReadDb(query, parameters);
         if (fullResponse == null)
             return ordini;
 
@@ -129,8 +170,14 @@ public class DaoOrdini
             ordine.Utente.TypeSort(singleResponse);
             ordine.Utente.Id = Convert.ToInt32(singleResponse["id_utente"]);
 
+            var prodottiJson = singleResponse["prodotti"].ToString();
+            ordine.Prodotti = GetDetailedProdottiList(prodottiJson);
+
             ordini.Add(ordine);
         }
+
         return ordini;
     }
+
+    #endregion
 }
