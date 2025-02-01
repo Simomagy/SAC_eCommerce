@@ -1,15 +1,17 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("menu-button");
-  const dropdown = document.getElementById("menu-dropdown");
+﻿$(document).ready(function () {
+  console.log("DOM fully loaded and parsed");
 
-  button.addEventListener("click", (e) => {
+  const $button = $("#menu-button");
+  const $dropdown = $("#menu-dropdown");
+
+  $button.on("click", function (e) {
     e.stopPropagation();
-    dropdown.classList.toggle("hidden");
+    $dropdown.toggleClass("hidden");
   });
 
-  document.addEventListener("click", () => {
-    if (!dropdown.classList.contains("hidden")) {
-      dropdown.classList.add("hidden");
+  $(document).on("click", function () {
+    if (!$dropdown.hasClass("hidden")) {
+      $dropdown.addClass("hidden");
     }
   });
 
@@ -18,6 +20,8 @@
     console.error("Orders data is null or undefined");
     return;
   }
+
+  console.log("Orders data:", orders);
 
   const ordersByWeek = {};
 
@@ -33,7 +37,11 @@
   const labels = Object.keys(ordersByWeek);
   const data = Object.values(ordersByWeek);
 
-  const ctx = document.getElementById("ordersChart").getContext("2d");
+  console.log("Chart labels:", labels);
+  console.log("Chart data:", data);
+
+  const ctx = $("#ordersChart")[0].getContext("2d");
+  Chart.defaults.backgroundColor = "#27272a"; // tailwind zinc 800
   new Chart(ctx, {
     type: "line",
     data: {
@@ -42,9 +50,14 @@
         {
           label: "Numero di ordini",
           data: data,
-          borderColor: "rgba(75, 192, 192, 1)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          borderColor: "#EB5E28", // primary color
+          backgroundColor: "rgba(235, 94, 40, 0.2)", // primary color with transparency
           fill: true,
+          tension: 0.4, // makes the line more rounded
+          pointBackgroundColor: "#EB5E28", // primary color
+          pointBorderColor: "#EB5E28", // primary color
+          pointRadius: 5, // larger points
+          pointHoverRadius: 7, // larger hover points
         },
       ],
     },
@@ -54,12 +67,27 @@
           title: {
             display: true,
             text: "Settimana",
+            color: "#FFFFFF", // white color for text
+          },
+          ticks: {
+            color: "#FFFFFF", // white color for ticks
           },
         },
         y: {
           title: {
             display: true,
             text: "Numero di ordini",
+            color: "#FFFFFF", // white color for text
+          },
+          ticks: {
+            color: "#FFFFFF", // white color for ticks
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: "#FFFFFF", // white color for legend,
           },
         },
       },
