@@ -75,4 +75,27 @@ public class UtenteController : Controller
 
         return RedirectToAction("Login", "Auth");
     }
+
+    public IActionResult Compra(int id)
+    {
+        var userJson = HttpContext.Session.GetString("LoggedUser");
+        if (userJson != null)
+        {
+            var user = JsonConvert.DeserializeObject<Utente>(userJson);
+            var prodotto = _daoProdotti.FindProdotto(id);
+            var ordine = new Ordine
+            {
+                Data = DateTime.Now,
+                Tipo_Ordine = "Acquisto Online",
+                Totale = prodotto.Prezzo,
+                Stato = "In Elaborazione",
+                Utente = user,
+                ID_LocazioneRitiro = 1
+            };
+            _daoOrdini.CreateRecord(ordine);
+            return RedirectToAction("Prodotti");
+
+        }
+        return RedirectToAction("Login", "Auth");
+    }
 }
