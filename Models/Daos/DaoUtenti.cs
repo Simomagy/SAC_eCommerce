@@ -10,59 +10,59 @@ namespace SAC_eCommerce.Models.Daos
         private readonly Database _db;
         private readonly string _tabella;
 
-        private DaoUtenti(IConfiguration configuration)
+        public DaoUtenti(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
-            _tabella = configuration["tables.utenti"];
+            _tabella = configuration["tables:utenti"];
         }
 
         #endregion
 
         #region CRUD
 
-        public bool CreateRecord(Entity entity)
+        public bool CreateRecord(Utente utente)
         {
-            var utente = (Utente)entity;
             var pwd = utente.Password;
             var parametri = new Dictionary<string, object>
             {
                 {"@nome", utente.Nome.Replace("'", "''")},
                 {"@cognome", utente.Cognome.Replace("'", "''")},
                 {"@email", utente.Email.Replace("'", "''")},
+                {"@role", utente.Role},
                 {"@points", utente.Points},
                 {"@card_number", utente.Card_Number.Replace("'", "''")},
             };
 
-            var query = $"INSERT INTO {_tabella} (Nome, Cognome, Email, Password, Points, Card_Number) " +
-                        $"VALUES (@nome, @cognome, @email, HASHBYTES('SHA2_512', '{pwd}'), @points, @card_number ) ";
+            var query = $"INSERT INTO {_tabella} (Nome, Cognome, Email, Password, Role, Points, Card_Number) " +
+                        $"VALUES (@nome, @cognome, @email, HASHBYTES('SHA2_512', '{pwd}'), @role, @points, @card_number ) ";
 
             var response = _db.UpdateDb(query, parametri);
 
             return response;
         }
 
-        public List<Utente> GetRecords()
+        public List<Entity> GetRecords()
         {
             var query = $"SELECT * FROM {_tabella}";
-            List<Utente> utenti = [];
+            List<Entity> utenti = [];
             var fullResponse = _db.ReadDb(query);
             if (fullResponse == null)
                 return utenti;
 
             foreach (var singleResponse in fullResponse)
             {
-                var ut = new Utente();
-                ut.TypeSort(singleResponse);
+                Entity entity = new Utente();
+                entity.TypeSort(singleResponse);
+                entity.Id = Convert.ToInt32(singleResponse["id_utente"]);
 
-                utenti.Add(ut);
+                utenti.Add(entity);
             }
             return utenti;
         }
 
 
-        public bool UpdateRecord(Entity entity)
+        public bool UpdateRecord(Utente utente)
         {
-            var utente = (Utente)entity;
             var pwd = utente.Password;
             var parametri = new Dictionary<string, object>
             {
@@ -94,18 +94,28 @@ namespace SAC_eCommerce.Models.Daos
             return _db.UpdateDb(query);
         }
 
-        public Utente? FindUser(int id)
+        public Utente? FindUser(string email)
         {
-            var query = $"SELECT * FROM {_tabella} where id = {id}";
+            var query = $"SELECT * FROM {_tabella} WHERE email = '{email}'";
+            var response = _db.ReadOneDb(query);
 
-            var singleResponse = _db.ReadOneDb(query);
-            if (singleResponse == null)
+            if (response == null)
                 return null;
 
-            var ut = new Utente();
-            ut.TypeSort(singleResponse);
+            var utente = new Utente();
+            utente.TypeSort(response);
+            utente.Id = Convert.ToInt32(response["id_utente"]);
 
-            return ut;
+            return utente;
+        }
+
+        public bool UserExists(string email, string password)
+        {
+            var query =
+                $"SELECT * FROM {_tabella} WHERE Email = '{email}' AND Password = HASHBYTES('SHA2_512', '{password}')";
+            var response = _db.ReadOneDb(query);
+
+            return response != null;
         }
         #endregion
     }

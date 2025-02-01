@@ -9,6 +9,11 @@
 
     <ItemGroup>
       <PackageReference Include="MSSTU.DB.Utility" Version="2.1.6" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Views\Shared\Components\Navbar\" />
     </ItemGroup>
 
 </Project>

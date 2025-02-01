@@ -8,10 +8,11 @@ namespace SAC_eCommerce.Models.Daos
         #region Inizializzazione
         private readonly Database _db;
         private readonly string _tabella;
-        private DaoProdotti(IConfiguration configuration)
+
+        public DaoProdotti(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
-            _tabella = configuration["tables.prodotti"];
+            _tabella = configuration["tables:prodotti"];
         }
         #endregion
         public bool CreateRecord(Prodotto prodotto)
@@ -63,18 +64,19 @@ namespace SAC_eCommerce.Models.Daos
             return _db.UpdateDb(query, parameters);
 
         }
-        public List<Prodotto> GetRecords()
+        public List<Entity> GetRecords()
         {
             var query = $"SELECT * FROM {_tabella}";
             var dataTable = _db.ReadDb(query);
-            var prodotti = new List<Prodotto>();
+            var prodotti = new List<Entity>();
             if (dataTable == null)
                 return prodotti;
 
             foreach (var row in dataTable)
             {
-                var prodotto = new Prodotto();
+                Entity prodotto = new Prodotto();
                 prodotto.TypeSort(row);
+                prodotto.Id = Convert.ToInt32(row["id_prodotto"]);
                 prodotti.Add(prodotto);
             }
             return prodotti;
@@ -89,15 +91,20 @@ namespace SAC_eCommerce.Models.Daos
             var result = _db.ReadDb(query, parameters);
             return result is { Count: > 0 };
         }
-        public bool FindProdotto(int id)
+        public Prodotto FindProdotto(int id)
         {
             var query = $"SELECT * FROM {_tabella} WHERE ID_Prodotto = @ID_Prodotto";
             var parameters = new Dictionary<string, object>
             {
                 {"@ID_Prodotto", id}
             };
-            var result = _db.ReadDb(query, parameters);
-            return result is { Count: > 0 };
+            var singleResponse = _db.ReadOneDb(query, parameters);
+            if (singleResponse == null)
+                return new Prodotto();
+            var prodotto = new Prodotto();
+            prodotto.TypeSort(singleResponse);
+            prodotto.Id = Convert.ToInt32(singleResponse["id_prodotto"]);
+            return prodotto;
         }
     }
 }

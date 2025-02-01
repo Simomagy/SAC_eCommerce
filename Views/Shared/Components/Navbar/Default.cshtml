@@ -1,0 +1,161 @@
+﻿@model SAC_eCommerce.Models.Classes.Utente
+
+@{
+    var isLogged = Model != null;
+    var isDipendente = isLogged && Model.Role == "dipendente";
+    var isManager = isLogged && Model.Role == "manager";
+}
+
+<nav
+    class="w-fit p-4 sticky flex gap-4 justify-between items-center backdrop-blur-md bg-zinc-950/50 z-50 my-8 rounded-md border-2 border-primary-400/20 shadow-xl shadow-zinc-950">
+    <!-- logo -->
+    <div class="w-fit flex-shrink-0 flex items-center gap-4">
+        <img class="h-8 md:h-10" src="~/assets/base-light.png" alt="">
+        <p class="text-md text-gray-400 font-black">
+            <span class="font-black text-primary-500 drop-shadow-[0px_0px_5px_#EE7A4D]">Tech</span>Retail
+        </p>
+    </div>
+
+    <!-- pages -->
+    <nav class="flex items-center justify-center w-full">
+        <ul class="flex items-center justify-center space-x-4">
+            <li class="relative inline-block">
+                <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300"
+                   asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="relative inline-block">
+                <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Utente" && ViewContext.RouteData.Values["action"]?.ToString() == "Prodotti" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-b-2 hover:border-orange-600 hover:text-white transition-all duration-300"
+                   asp-controller="Utente" asp-action="Prodotti">Prodotti</a>
+            </li>
+            @if (isLogged && (isManager || isDipendente))
+            {
+                <!-- Apps -->
+                <button type="button" id="appsButton" class="base-button">
+                    <!-- Icon -->
+                    <i class="ti ti-apps text-xl"></i>
+                    <span class="text-sm">Apps</span>
+                </button>
+                <!-- Dropdown menu -->
+                <div
+                    class="hidden absolute top-[100%] backdrop-blur-md m-0 p-0 overflow-hidden z-50 max-w-sm text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
+                    id="appsDropdown">
+                    <div class="block py-2 px-4 text-base font-medium text-center text-zinc-50 bg-zinc-700">Apps</div>
+                    <div class="grid grid-cols-3 gap-4 p-4">
+                        @if (isManager)
+                        {
+                            <a asp-controller="Admin" asp-action="Dashboard"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-shopping-cart text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Vendite</div>
+                            </a>
+                            <a asp-controller="Admin" asp-action="Clienti"
+                               class="block p-4 text-center base-button group">
+                                <i class="ti ti-users text-xl"></i>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Clienti</div>
+                            </a>
+                        }
+                        <a asp-controller="Admin" asp-action="Prodotti" class="block p-4 text-center base-button group">
+                            <i class="ti ti-inbox text-xl"></i>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Notifiche</div>
+                        </a>
+                        <a asp-controller="Utente" asp-action="Profilo" class="block p-4 text-center base-button group">
+                            <i class="ti ti-user text-xl"></i>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Profilo</div>
+                        </a>
+                        <a asp-controller="Utente" asp-action="Impostazioni"
+                           class="block p-4 text-center base-button group">
+                            <i class="ti ti-settings text-xl"></i>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Impostazioni</div>
+                        </a>
+                        <a asp-controller="Admin" asp-action="Prodotti" class="block p-4 text-center base-button group">
+                            <i class="ti ti-box text-xl"></i>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Prodotti</div>
+                        </a>
+                        <a asp-controller="Admin" asp-action="Ordini" class="block p-4 text-center base-button group">
+                            <i class="ti ti-credit-card text-xl"></i>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Pagamenti</div>
+                        </a>
+                        <a asp-controller="Admin" asp-action="Ordini" class="block p-4 text-center base-button group">
+                            <i class="ti ti-briefcase text-xl"></i>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Ordini</div>
+                        </a>
+                        <a asp-controller="Auth" asp-action="Logout" class="block p-4 text-center base-button group">
+                            <i class="ti ti-logout text-xl"></i>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Esci</div>
+                        </a>
+                    </div>
+                </div>
+            }
+        </ul>
+    </nav>
+
+    <!-- buttons -->
+    <nav class="contents">
+        <ul class="w-fit flex items-center justify-end">
+            <li class="ml-2 lg:ml-4 relative inline-block">
+                @if (isLogged)
+                {
+                    <a id="userButton" class="base-button overflow-hidden whitespace-nowrap text-ellipsis"
+                       style="max-width: 150px;">
+                        <i class="ti ti-user text-xl"></i>
+                        @if (Model.Nome == "Non specificato")
+                        {
+                            <span class="text-sm overflow-hidden whitespace-nowrap text-ellipsis">Account</span>
+                        }
+                        else
+                        {
+                            <span class="text-sm overflow-hidden whitespace-nowrap text-ellipsis">@Model.Nome</span>
+                        }
+                    </a>
+                    <div
+                        class="hidden backdrop-blur-md m-0 p-0 absolute z-50 w-fit whitespace-nowrap text-base list-none rounded divide-y divide-gray-100 bg-zinc-800/50 border-2 border-zinc-600 shadow-xl"
+                        id="userDropdown">
+                        <div class="py-3 px-4 w-fit">
+                            <span
+                                class="block text-sm font-semibold text-gray-900 dark:text-white">@Model.Nome @Model.Cognome</span>
+                            <span class="block text-sm text-gray-500 truncate dark:text-gray-400">@Model.Email</span>
+                        </div>
+                        <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
+                            <li>
+                                <a asp-controller="Utente" asp-action="Profilo"
+                                   class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-zinc-600 dark:text-zinc-400 dark:hover:text-white transition-all duration-300">Profilo</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Utente" asp-action="Impostazioni"
+                                   class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-zinc-600 dark:text-zinc-400 dark:hover:text-white transition-all duration-300">Impostazioni</a>
+                            </li>
+                        </ul>
+                        <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
+                            <li>
+                                <a asp-controller="Auth" asp-action="Logout"
+                                   class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-zinc-600 dark:hover:text-white transition-all duration-300">Esci</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Auth" asp-action="Login" class="base-button">
+                        <i class="ti ti-login text-xl"></i>
+                        Login
+                    </a>
+                }
+            </li>
+            <li class="ml-2 lg:ml-4 relative inline-block">
+                <a class="" href="">
+                    <div
+                        class="absolute -top-1 -right-2 z-10 bg-yellow-400/80 text-[8px] text-zinc-950 font-bold px-1 py-0.5 rounded-sm">
+                        12
+                    </div>
+                    <i class="ti ti-shopping-cart text-gray-500 text-xl"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- cart count -->
+    <div class="mx-4 hidden sm:flex flex-col font-bold">
+        <span class="text-[10px] text-gray-400">Your Cart</span>
+        <span class="text-xs">$2,650,59</span>
+    </div>
+</nav>

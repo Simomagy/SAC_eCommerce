@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var loggedUser = ViewBag.User as SAC_eCommerce.Models.Classes.Utente;
 }
 
 <!DOCTYPE html>
@@ -9,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
 </head>
+@await Component.InvokeAsync("Navbar", new { user = loggedUser })
 <body class="bg-zinc-950 text-white flex flex-col justify-center items-center">
-
 <!-- Hero Section -->
 <div class="max-w-4xl mx-auto my-12 p-16 rounded-lg">
     <h1 class="text-6xl font-bold text-center mb-4 leading-relaxed">
@@ -66,9 +67,10 @@
     <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div>
-                <img src="#" class="mr-5 h-6 sm:h-9" alt="logo"/>
+                <img src="/assets/base-light.png" class="mr-5 h-6 sm:h-9" alt="logo"/>
                 <p class="max-w-xs mt-4 text-sm text-gray-600">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, accusantium.
+                    <strong>TechRetail</strong> è il tuo punto di riferimento online per prodotti di tecnologia. Da noi troverai
+                    una selezione curata dei migliori dispositivi elettronici, pensati per offrirti qualità e stile senza compromessi.
                 </p>
                 <div class="flex mt-8 space-x-6 text-gray-600">
                     <a class="hover:opacity-75" href target="_blank" rel="noreferrer">
@@ -112,55 +114,43 @@
                     </a>
                 </div>
             </div>
-            <div class="grid grid-cols-1 gap-8 lg:col-span-2 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="grid grid-cols-1 gap-8 lg:col-span-2 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                     <p class="font-medium">
-                        Company
+                        Informazioni
                     </p>
                     <nav class="flex flex-col mt-4 space-y-2 text-sm text-gray-500">
-                        <a class="hover:opacity-75" href> About </a>
-                        <a class="hover:opacity-75" href> Meet the Team </a>
-                        <a class="hover:opacity-75" href> History </a>
-                        <a class="hover:opacity-75" href> Careers </a>
+                        <a class="hover:opacity-75" href> Chi Siamo </a>
+                        <a class="hover:opacity-75" href> Termini & Condizioni </a>
+                        <a class="hover:opacity-75" href> Privacy & Policy </a>
+                        <a class="hover:opacity-75" href> FAQ </a>
                     </nav>
                 </div>
                 <div>
                     <p class="font-medium">
-                        Services
+                        Servizi
                     </p>
                     <nav class="flex flex-col mt-4 space-y-2 text-sm text-gray-500">
-                        <a class="hover:opacity-75" href> 1on1 Coaching </a>
-                        <a class="hover:opacity-75" href> Company Review </a>
-                        <a class="hover:opacity-75" href> Accounts Review </a>
-                        <a class="hover:opacity-75" href> HR Consulting </a>
-                        <a class="hover:opacity-75" href> SEO Optimisation </a>
+                        <a class="hover:opacity-75" href> Spedizione & Consegna </a>
+                        <a class="hover:opacity-75" href> Resi & Rimborsi </a>
+                        <a class="hover:opacity-75" href> Programmi Fedeltà </a>
+                        <a class="hover:opacity-75" href> Finanziamenti </a>
                     </nav>
                 </div>
                 <div>
                     <p class="font-medium">
-                        Helpful Links
+                        Contatti
                     </p>
                     <nav class="flex flex-col mt-4 space-y-2 text-sm text-gray-500">
-                        <a class="hover:opacity-75" href> Contact </a>
-                        <a class="hover:opacity-75" href> FAQs </a>
-                        <a class="hover:opacity-75" href> Live Chat </a>
-                    </nav>
-                </div>
-                <div>
-                    <p class="font-medium">
-                        Legal
-                    </p>
-                    <nav class="flex flex-col mt-4 space-y-2 text-sm text-gray-500">
-                        <a class="hover:opacity-75" href> Privacy Policy </a>
-                        <a class="hover:opacity-75" href> Terms &amp; Conditions </a>
-                        <a class="hover:opacity-75" href> Returns Policy </a>
-                        <a class="hover:opacity-75" href> Accessibility </a>
+                        <a class="hover:opacity-75" href> info@techretail.com </a>
+                        <a class="hover:opacity-75" href> +39 392 00 56 798 </a>
+                        <a class="hover:opacity-75" href> Via Dei Mille 34, Roma </a>
                     </nav>
                 </div>
             </div>
         </div>
         <p class="mt-8 text-xs text-gray-800">
-            © 2022 Comany Name
+            © 2025 TechRetail
         </p>
     </div>
 </footer>

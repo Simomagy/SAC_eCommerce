@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SAC_eCommerce.Models;
+using SAC_eCommerce.Models.Classes;
 
 namespace SAC_eCommerce.Controllers;
 
@@ -15,6 +17,13 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        var userJson = HttpContext.Session.GetString("LoggedUser");
+        if (userJson != null)
+        {
+            var user = JsonConvert.DeserializeObject<Utente>(userJson);
+            ViewBag.User = user;
+        }
+
         return View();
     }
 
