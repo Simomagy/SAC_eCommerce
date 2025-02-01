@@ -3,8 +3,8 @@
 ## UtenteController
 
 * [X]  Profilo (informazioni utente non modificabili + lista acquisti)
-* [X]  Prodotti (lista prodotti)
-* [ ]  AggiungiAlCarrello (aggiunge un prodotto al carrello)
+* [ ]  Prodotti (lista prodotti)
+* [X]  AggiungiAlCarrello (aggiunge un prodotto al carrello)
 * [X]  Impostazioni (informazioni utente modificabili => nome, cognome, email, password, eliminazione account)
 * [X]  AggiornaUtente (prende i dati modificati dal form delle impostazioni sopra e modifica l'utente nel database)
 

@@ -82,10 +82,18 @@ internal class DaoOrdini
         foreach (var singleResponse in fullResponse)
         {
             var ordine = new Ordine();
-            ordine.TypeSort(singleResponse);
+            ordine.Data = Convert.ToDateTime(singleResponse["data"]);
+            ordine.Tipo_Ordine = singleResponse["tipo_ordine"].ToString();
+            ordine.Totale = Convert.ToDouble(singleResponse["totale"]);
+            ordine.Stato = singleResponse["stato"].ToString();
             ordine.Id = Convert.ToInt32(singleResponse["id_ordine"]);
             ordine.Utente = new Utente();
-            ordine.Utente.TypeSort(singleResponse);
+            ordine.Utente.Nome = singleResponse["nome"].ToString();
+            ordine.Utente.Cognome = singleResponse["cognome"].ToString();
+            ordine.Utente.Email = singleResponse["email"].ToString();
+            ordine.Utente.Points = Convert.ToInt32(singleResponse["points"]);
+            ordine.Utente.Card_Number = singleResponse["card_number"].ToString();
+            ordine.Utente.Role = singleResponse["role"].ToString();
             ordine.Utente.Id = Convert.ToInt32(singleResponse["id_utente"]);
 
             var prodottiJson = singleResponse["prodotti"].ToString();

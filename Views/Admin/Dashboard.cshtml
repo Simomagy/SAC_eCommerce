@@ -1,0 +1,74 @@
+﻿@using Newtonsoft.Json
+@{
+    ViewBag.Title = "title";
+    var loggedUser = ViewBag.User as SAC_eCommerce.Models.Classes.Utente;
+    var orders = ViewBag.Ordini as List<SAC_eCommerce.Models.Classes.Ordine>;
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - TailusUI Dark</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-zinc-950 text-white">
+<div class="flex h-screen">
+    @await Component.InvokeAsync("AdminNav", new { user = loggedUser })
+
+    <main class="flex-1 p-8 overflow-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <section class="bg-zinc-950 p-6 rounded-lg shadow-md border border-gray-700">
+                <h2 class="text-xl font-semibold mb-4">Volume degli ordini</h2>
+                <div class="h-64 bg-gray-800 rounded flex items-center justify-center">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </section>
+
+            <section class="bg-zinc-950 p-6 rounded-lg shadow-md border border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-semibold">Inventari</h2>
+                    <div class="relative inline-block text-left">
+                        <button id="menu-button" type="button"
+                                class="inline-flex justify-center w-full rounded-md border border-gray-600 shadow-sm px-4 py-2 bg-gray-800 text-sm font-medium hover:bg-gray-700 focus:outline-none"
+                                aria-expanded="true" aria-haspopup="true">
+                            Seleziona inventario
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                            </svg>
+                        </button>
+                        <div id="menu-dropdown"
+                             class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-10 hidden">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700">Inventario
+                                    1</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700">Inventario
+                                    2</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700">Inventario
+                                    3</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-64 bg-gray-800 rounded flex items-center justify-center">
+                    <span class="text-gray-300">Grafico inventari</span>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script src="~/js/Admin/Dashboard.js"></script>
+<script>
+    window.ordersData = @Html.Raw(JsonConvert.SerializeObject(orders));
+</script>
+</body>
+</html>

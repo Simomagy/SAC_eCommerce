@@ -113,3 +113,26 @@ WHERE ID_Ordine = 1003;
 UPDATE ORDINI
 SET Prodotti = '[{"ID_Prodotto": 5, "Quantita": 1}, {"ID_Prodotto": 8, "Quantita": 5}]'
 WHERE ID_Ordine = 1004;
+
+-- Nuovi inserimenti per la tabella ORDINE
+INSERT INTO ORDINI (ID_Ordine, Data, Tipo_Ordine, Totale, Stato, ID_Cliente, Prodotti)
+VALUES (1005, '2024-06-01', 'Acquisto Online', 899.98, 'In Elaborazione', 1,
+        '[{"ID_Prodotto": 3, "Quantita": 1}, {"ID_Prodotto": 7, "Quantita": 2}, {"ID_Prodotto": 12, "Quantita": 1}]'),
+       (1006, '2024-06-02', 'Acquisto Negozio', 299.99, 'In Elaborazione', 2,
+        '[{"ID_Prodotto": 5, "Quantita": 1}, {"ID_Prodotto": 9, "Quantita": 3}]'),
+       (1007, '2024-06-03', 'Acquisto Online', 199.99, 'In Elaborazione', 3,
+        '[{"ID_Prodotto": 1, "Quantita": 1}, {"ID_Prodotto": 8, "Quantita": 2}]'),
+       (1008, '2024-06-04', 'Acquisto Negozio', 399.99, 'In Elaborazione', 1,
+        '[{"ID_Prodotto": 4, "Quantita": 1}, {"ID_Prodotto": 10, "Quantita": 2}, {"ID_Prodotto": 11, "Quantita": 1}]'),
+       (1009, '2024-06-05', 'Acquisto Online', 499.99, 'In Elaborazione', 2,
+        '[{"ID_Prodotto": 2, "Quantita": 1}, {"ID_Prodotto": 6, "Quantita": 3}, {"ID_Prodotto": 13, "Quantita": 1}]'),
+       (1010, '2024-06-06', 'Acquisto Negozio', 599.99, 'In Elaborazione', 3,
+        '[{"ID_Prodotto": 7, "Quantita": 1}, {"ID_Prodotto": 14, "Quantita": 2}]'),
+       (1011, '2024-06-07', 'Acquisto Online', 699.99, 'In Elaborazione', 1,
+        '[{"ID_Prodotto": 3, "Quantita": 1}, {"ID_Prodotto": 5, "Quantita": 2}, {"ID_Prodotto": 15, "Quantita": 1}]'),
+       (1012, '2024-06-08', 'Acquisto Negozio', 799.99, 'In Elaborazione', 2,
+        '[{"ID_Prodotto": 8, "Quantita": 1}, {"ID_Prodotto": 12, "Quantita": 2}, {"ID_Prodotto": 1, "Quantita": 1}]'),
+       (1013, '2024-06-09', 'Acquisto Online', 899.99, 'In Elaborazione', 3,
+        '[{"ID_Prodotto": 4, "Quantita": 1}, {"ID_Prodotto": 9, "Quantita": 3}, {"ID_Prodotto": 10, "Quantita": 1}]'),
+       (1014, '2025-06-10', 'Acquisto Negozio', 999.99, 'In Elaborazione', 1,
+        '[{"ID_Prodotto": 6, "Quantita": 1}, {"ID_Prodotto": 11, "Quantita": 2}, {"ID_Prodotto": 13, "Quantita": 1}]');
