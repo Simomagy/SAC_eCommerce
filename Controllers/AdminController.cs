@@ -31,4 +31,24 @@ public class AdminController : Controller
 
         return View();
     }
+
+    public IActionResult Clienti()
+    {
+        var userJson = HttpContext.Session.GetString("LoggedUser");
+        if (userJson != null)
+        {
+            var user = JsonConvert.DeserializeObject<Utente>(userJson);
+            ViewBag.User = user;
+            var clienti = _daoUtenti.GetRecords();
+            return View(clienti);
+        }
+
+        return RedirectToAction("Login", "Auth");
+    }
+
+    public IActionResult EliminaAccount(int id)
+    {
+        _daoUtenti.DeleteRecord(id);
+        return RedirectToAction("Clienti");
+    }
 }

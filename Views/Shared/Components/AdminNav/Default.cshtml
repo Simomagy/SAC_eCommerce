@@ -2,6 +2,10 @@
 
 @{
     Layout = null;
+    var isLogged = Model != null;
+    var isManager = isLogged && Model.Role == "manager";
+    var currentController = ViewContext.RouteData.Values["controller"].ToString();
+    var currentAction = ViewContext.RouteData.Values["action"].ToString();
 }
 
 <!DOCTYPE html>
@@ -12,22 +16,63 @@
 </head>
 <body>
 <div>
-    <aside class="w-64 bg-zinc-950/80 backdrop-blur-xl border-2 rounded border-gray-700 p-6"><h2
-            class="text-2xl font-bold mb-8">
-            Dashboard</h2>
+    <aside class="w-64 bg-zinc-950/80 backdrop-blur-xl border-2 rounded-md border-zinc-700 p-6">
+        <h2 class="text-2xl font-bold mb-8">@currentAction</h2>
         <nav>
             <ul>
-                <li class="mb-4"><a href="#" class="flex items-center p-2 rounded hover:bg-primary-600">
-                        <!-- Icona opzionale --> <span class="ml-2">Home</span> </a></li>
-                <li class="mb-4"><a href="#" class="flex items-center p-2 rounded hover:bg-primary-600"> <span
-                            class="ml-2">Ordini</span>
-                    </a></li>
-                <li class="mb-4"><a href="#" class="flex items-center p-2 rounded hover:bg-primary-600"> <span
-                            class="ml-2">Inventari</span>
-                    </a></li>
-                <li class="mb-4"><a href="#" class="flex items-center p-2 rounded hover:bg-primary-600"> <span
-                            class="ml-2">Report</span>
-                    </a></li>
+                @if (isManager)
+                {
+                    <li class="mb-4">
+                        <a asp-controller="Admin" asp-action="Dashboard"
+                           class="@(currentController == "Admin" && currentAction == "Dashboard" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-l-2 hover:border-orange-600 hover:text-white transition-all duration-300">
+                            <i class="ti ti-layout-dashboard"></i>
+                            <span class="ml-2">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a asp-controller="Admin" asp-action="Clienti"
+                           class="@(currentController == "Admin" && currentAction == "Clienti" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-l-2 hover:border-orange-600 hover:text-white transition-all duration-300">
+                            <i class="ti ti-users"></i>
+                            <span class="ml-2">Clienti</span>
+                        </a>
+                    </li>
+                }
+
+                <li class="mb-4">
+                    <a asp-controller="Admin" asp-action="Prodotti"
+                       class="@(currentController == "Admin" && currentAction == "Prodotti" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-l-2 hover:border-orange-600 hover:text-white transition-all duration-300">
+                        <i class="ti ti-package"></i>
+                        <span class="ml-2">Prodotti</span>
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a asp-controller="Admin" asp-action="Ordini"
+                       class="@(currentController == "Admin" && currentAction == "Ordini" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-l-2 hover:border-orange-600 hover:text-white transition-all duration-300">
+                        <i class="ti ti-shopping-cart"></i>
+                        <span class="ml-2">Ordini</span>
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a asp-controller="Utente" asp-action="Profilo"
+                       class="@(currentController == "Utente" && currentAction == "Profilo" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-l-2 hover:border-orange-600 hover:text-white transition-all duration-300">
+                        <i class="ti ti-user"></i>
+                        <span class="ml-2">Profilo</span>
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a asp-controller="Utente" asp-action="Impostazioni"
+                       class="@(currentController == "Utente" && currentAction == "Impostazioni" ? "bg-orange-600/50 border-2 border-orange-600 rounded-md" : "border-transparent") px-3 py-2 text-sm font-medium text-gray-300 border-l-2 hover:border-orange-600 hover:text-white transition-all duration-300">
+                        <i class="ti ti-settings"></i>
+                        <span class="ml-2">Impostazioni</span>
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a asp-controller="Auth" asp-action="Logout"
+                       class="border-transparent px-3 py-2 text-sm font-medium text-gray-300 border-l-2 hover:border-orange-600 hover:text-white transition-all duration-300">
+                        <i class="ti ti-logout"></i>
+                        <span class="ml-2">Esci</span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </aside>
