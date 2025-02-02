@@ -63,7 +63,7 @@
                         <th scope="col" class="px-4 py-3">Punti</th>
                         <th scope="col" class="px-4 py-3">Numero Carta</th>
                         <th scope="col" class="px-4 py-3">Ruolo</th>
-                        <th scope="col" class="px-4 py-3">Elimina</th>
+                        <th scope="col" class="px-4 py-3">Azioni</th>
                     </tr>
                     </thead>
                     <tbody id="clientiTableBody">
@@ -93,11 +93,20 @@
                                     <span class="bg-blue-500 text-white px-2 py-1 rounded-md">Dipendente</span>
                                 }
                             </td>
-                            <td class="px-4 py-3">
-                                <button type="button" class="text-red-600 hover:text-red-800 delete-button"
+                            <td class="px-4 py-3 flex space-x-2">
+                                <button type="button"
+                                        class="bg-blue-500/50 border border-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-500 view-details-button"
+                                        data-id="@cliente.Id" data-nome="@cliente.Nome" data-cognome="@cliente.Cognome"
+                                        data-email="@cliente.Email" data-points="@cliente.Points"
+                                        data-cardnumber="@cliente.Card_Number" data-role="@cliente.Role">
+                                    <i class="ti ti-eye"></i>
+                                    Dettagli
+                                </button>
+                                <button type="button"
+                                        class="bg-danger-500/50 border border-danger-500 text-white px-2 py-1 rounded-md hover:bg-danger-500 delete-button"
                                         data-id="@cliente.Id">
                                     <i class="ti ti-trash"></i>
-                                    Elimina Account
+                                    Elimina
                                 </button>
                             </td>
                         </tr>
@@ -128,6 +137,31 @@
                 <button id="cancelDelete"
                         class="px-4 py-2 bg-gray-600/50 border-2 border-gray-600 text-white text-base font-medium h-fit rounded-md w-full shadow-sm hover:bg-gray-700">
                     Annulla
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div id="detailsModal"
+     class="fixed inset-0 backdrop-blur-md bg-zinc-950 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-1/4 mx-auto p-5 border w-96 shadow-lg rounded-md bg-zinc-950/50 backdrop-blur-xl">
+        <div class="mt-3 text-center">
+            <i class="ti ti-info-circle text-blue-500 text-4xl"></i>
+            <h3 class="text-lg leading-6 font-medium text-zinc-50">Dettagli Account</h3>
+            <div class="mt-2 text-left">
+                <p class="text-sm text-gray-400"><strong>Nome:</strong> <span id="detailNome"></span></p>
+                <p class="text-sm text-gray-400"><strong>Cognome:</strong> <span id="detailCognome"></span></p>
+                <p class="text-sm text-gray-400"><strong>Email:</strong> <span id="detailEmail"></span></p>
+                <p class="text-sm text-gray-400"><strong>Punti:</strong> <span id="detailPoints"></span></p>
+                <p class="text-sm text-gray-400"><strong>Numero Carta:</strong> <span id="detailCardNumber"></span></p>
+                <p class="text-sm text-gray-400"><strong>Ruolo:</strong> <span id="detailRole"></span></p>
+            </div>
+            <div class="mt-4">
+                <button id="closeDetails"
+                        class="px-4 py-2 bg-gray-600/50 border-2 border-gray-600 text-white text-base font-medium h-fit rounded-md w-full shadow-sm hover:bg-gray-700">
+                    Chiudi
                 </button>
             </div>
         </div>

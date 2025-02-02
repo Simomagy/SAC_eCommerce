@@ -11,4 +11,12 @@ public class Ordine : Entity
 
     public Utente Utente { get; set; }
     public List<Prodotto> Prodotti { get; set; }
+
+    public double CalcolaTotale()
+    {
+        double totale = 0;
+        foreach (var prodotto in Prodotti) totale += prodotto.Prezzo;
+
+        return totale;
+    }
 }

@@ -9,16 +9,38 @@ public class DaoInventario
 
     private readonly Database _db;
     private readonly string? _tabella;
+    private readonly DaoProdotti _daoProdotti;
+    private readonly DaoNegozi _daoNegozio;
 
     public DaoInventario(IConfiguration configuration)
     {
         _db = new Database(configuration["db_name"], configuration["server_db"]);
-        _tabella = configuration["tables.inventario"];
+        _tabella = configuration["tables:inventari"];
+        _daoProdotti = new DaoProdotti(configuration);
+        _daoNegozio = new DaoNegozi(configuration);
     }
 
     #endregion
-    
-    
+
+    public List<Inventario> GetRecords()
+    {
+        var query = $"SELECT * FROM {_tabella}";
+        var response = _db.ReadDb(query);
+        var inventarioList = new List<Inventario>();
+        if (response == null)
+            return inventarioList;
+        foreach (var record in response)
+        {
+            var inventario = new Inventario();
+            inventario.TypeSort(record);
+            inventario.Id = Convert.ToInt32(record["id_inventario"]);
+            inventario.Prodotto = _daoProdotti.FindProdotto(Convert.ToInt32(record["id_prodotto"]));
+            inventario.Negozio = _daoNegozio.FindNegozio(Convert.ToInt32(record["id_locazione"]));
+            inventarioList.Add(inventario);
+        }
+
+        return inventarioList;
+    }
     public bool CreateRecord(Entity entity)
     {
         var inventario = (Inventario)entity;

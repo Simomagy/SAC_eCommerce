@@ -1,0 +1,195 @@
+﻿@model List<SAC_eCommerce.Models.ViewModels.ProdottoConDisponibilitaViewModel>
+
+@{
+    ViewBag.Title = "Prodotti";
+    var loggedUser = ViewBag.User as SAC_eCommerce.Models.Classes.Utente;
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Prodotti</title>
+    <script src="~/js/Admin/Prodotti.js"></script>
+</head>
+<body class="bg-zinc-950 text-white">
+<div class="flex h-screen">
+    @await Component.InvokeAsync("AdminNav", new { user = loggedUser })
+
+    <main class="flex-1 p-8 overflow-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold">Prodotti</h1>
+        </header>
+
+        <div class="flex justify-between mb-4 w-full">
+            <div class="flex flex-col w-1/2">
+                <label for="searchBar" class="text-sm font-medium text-zinc-300 dark:text-zinc-400">Cerca:</label>
+                <input type="text" id="searchBar" placeholder="Cerca per Nome o Categoria"
+                       class="px-3 py-2 text-sm font-medium text-zinc-300 bg-zinc-700 border border-zinc-600 rounded-md"/>
+            </div>
+            <div class="flex space-x-4">
+                <div class="flex flex-col w-fit">
+                    <label for="sortBy" class="text-sm font-medium text-zinc-300 dark:text-zinc-400">Ordina per:</label>
+                    <select id="sortBy"
+                            class="px-3 py-2 text-sm font-medium text-zinc-300 bg-zinc-700 border border-zinc-600 rounded-md">
+                        <option value="Nome">Nome</option>
+                        <option value="Prezzo">Prezzo</option>
+                        <option value="Categoria">Categoria</option>
+                    </select>
+                </div>
+                <div class="flex flex-col w-fit">
+                    <label for="sortOrder" class="text-sm font-medium text-zinc-300 dark:text-zinc-400">Ordine:</label>
+                    <select id="sortOrder"
+                            class="px-3 py-2 text-sm font-medium text-zinc-300 bg-zinc-700 border border-zinc-600 rounded-md">
+                        <option value="asc">Crescente</option>
+                        <option value="desc">Decrescente</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-lg border border-zinc-200 p-4 md:p-8">
+            <div class="overflow-y-scroll max-h-[500px]">
+                <table class="w-full text-sm text-left text-zinc-500 dark:text-zinc-400">
+                    <thead class="text-xs text-zinc-700 uppercase bg-zinc-50 dark:bg-zinc-700 dark:text-zinc-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">Nome</th>
+                        <th scope="col" class="px-4 py-3">Prezzo</th>
+                        <th scope="col" class="px-4 py-3">Categoria</th>
+                        <th scope="col" class="px-4 py-3">Quantità</th>
+                        <th scope="col" class="px-4 py-3">Disponibilità Magazzino</th>
+                        <th scope="col" class="px-4 py-3">Disponibilità Negozi</th>
+                        <th scope="col" class="px-4 py-3">Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody id="prodottiTableBody">
+                    @foreach (var item in Model)
+                    {
+                        var storeAvailabilityPercentage = (double)item.DisponibilitaNegozi / item.DisponibilitaMagazzino * 100;
+
+                        string? warehouseAvailabilityClass;
+                        string? warehouseAvailabilityIcon;
+                        switch (item.DisponibilitaMagazzino)
+                        {
+                            case < 15:
+                                warehouseAvailabilityClass = "bg-red-500/50 text-white px-2 py-1 rounded-md border border-red-500";
+                                warehouseAvailabilityIcon = "<i class='ti ti-alert-triangle'></i>";
+                                break;
+                            case < 50:
+                                warehouseAvailabilityClass = "bg-yellow-500/50 text-white px-2 py-1 rounded-md border border-yellow-500";
+                                warehouseAvailabilityIcon = "<i class='ti ti-alert-triangle'></i>";
+                                break;
+                            case < 100:
+                                warehouseAvailabilityClass = "bg-green-500/50 text-white px-2 py-1 rounded-md border border-green-500";
+                                warehouseAvailabilityIcon = "<i class='ti ti-check'></i>";
+                                break;
+                            default:
+                                warehouseAvailabilityClass = "bg-blue-500/50 text-white px-2 py-1 rounded-md border border-blue-500";
+                                warehouseAvailabilityIcon = "<i class='ti ti-checks'></i>";
+                                break;
+                        }
+
+                        string? storeAvailabilityClass;
+                        string? storeAvailabilityIcon;
+                        switch (storeAvailabilityPercentage)
+                        {
+                            case < 25:
+                                storeAvailabilityClass = "bg-red-500/50 text-white px-2 py-1 rounded-md border border-red-500";
+                                storeAvailabilityIcon = "<i class='ti ti-alert-triangle'></i>";
+                                break;
+                            case < 50:
+                                storeAvailabilityClass = "bg-yellow-500/50 text-white px-2 py-1 rounded-md border border-yellow-500";
+                                storeAvailabilityIcon = "<i class='ti ti-alert-triangle'></i>";
+                                break;
+                            case < 75:
+                                storeAvailabilityClass = "bg-green-500/50 text-white px-2 py-1 rounded-md border border-green-500";
+                                storeAvailabilityIcon = "<i class='ti ti-check'></i>";
+                                break;
+                            default:
+                                storeAvailabilityClass = "bg-blue-500/50 text-white px-2 py-1 rounded-md border border-blue-500";
+                                storeAvailabilityIcon = "<i class='ti ti-checks'></i>";
+                                break;
+                        }
+
+                        <tr class="border-b dark:border-zinc-700" data-nome="@item.Prodotto.Nome.ToLower()"
+                            data-prezzo="@item.Prodotto.Prezzo" data-categoria="@item.Prodotto.Categoria.ToLower()">
+                            <td class="px-4 py-3 font-medium text-zinc-900 whitespace-nowrap dark:text-white">
+                                @item.Prodotto.Nome
+                            </td>
+                            <td class="px-4 py-3">@item.Prodotto.Prezzo</td>
+                            <td class="px-4 py-3">@item.Prodotto.Categoria</td>
+                            <td class="px-4 py-3">@item.Prodotto.Quantita</td>
+                            <td class="px-4 py-3">
+                                <p class="@warehouseAvailabilityClass">
+                                    @Html.Raw(warehouseAvailabilityIcon) @item.DisponibilitaMagazzino
+                                </p>
+                            <td class="px-4 py-3">
+                                <p class="@storeAvailabilityClass">
+                                    @Html.Raw(storeAvailabilityIcon) @item.DisponibilitaNegozi (@Math.Round(storeAvailabilityPercentage)%)
+                                </p>
+                            </td>
+                            <td class="px-4 py-3 flex space-x-2">
+                                <button type="button"
+                                        class="bg-blue-500/50 border border-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-500 view-details-button"
+                                        data-id="@item.Prodotto.Id" data-nome="@item.Prodotto.Nome"
+                                        data-descrizione="@item.Prodotto.Descrizione"
+                                        data-prezzo="@item.Prodotto.Prezzo" data-categoria="@item.Prodotto.Categoria"
+                                        data-quantita="@item.Prodotto.Quantita"
+                                        data-disponibilita-negozi="@item.DisponibilitaNegozi">
+                                    <i class="ti ti-eye"></i>
+                                    Dettagli
+                                </button>
+                                <button type="button"
+                                        class="bg-danger-500/50 border border-danger-500 text-white px-2 py-1 rounded-md hover:bg-danger-500 delete-button"
+                                        data-id="@item.Prodotto.Id">
+                                    <i class="ti ti-trash"></i>
+                                    Elimina
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-4">
+            @for (var i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <a href="@Url.Action("Prodotti", new { page = i, sortBy = ViewBag.SortBy, sortOrder = ViewBag.SortOrder })"
+                   class="px-3 py-1 mx-1 border rounded @(i == ViewBag.CurrentPage ? "bg-blue-500 text-white" : "bg-zinc-700 text-zinc-300")">
+                    @i
+                </a>
+            }
+        </div>
+    </main>
+</div>
+
+<!-- Details Modal -->
+<div id="detailsModal"
+     class="fixed inset-0 backdrop-blur-md bg-zinc-950 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-1/4 mx-auto p-5 border w-96 shadow-lg rounded-md bg-zinc-950/50 backdrop-blur-xl">
+        <div class="mt-3 text-center">
+            <i class="ti ti-info-circle text-blue-500 text-4xl"></i>
+            <h3 class="text-lg leading-6 font-medium text-zinc-50">Dettagli Prodotto</h3>
+            <div class="mt-2 text-left">
+                <p class="text-sm text-gray-400"><strong>Nome:</strong> <span id="detailNome"></span></p>
+                <p class="text-sm text-gray-400"><strong>Descrizione:</strong> <span id="detailDescrizione"></span></p>
+                <p class="text-sm text-gray-400"><strong>Prezzo:</strong> <span id="detailPrezzo"></span></p>
+                <p class="text-sm text-gray-400"><strong>Categoria:</strong> <span id="detailCategoria"></span></p>
+                <p class="text-sm text-gray-400"><strong>Quantità:</strong> <span id="detailQuantita"></span></p>
+                <p class="text-sm text-gray-400"><strong>Disponibilità nei Negozi:</strong> <span
+                        id="detailDisponibilitaNegozi"></span></p>
+            </div>
+            <div class="mt-4">
+                <button id="closeDetails"
+                        class="px-4 py-2 bg-gray-600/50 border-2 border-gray-600 text-white text-base font-medium h-fit rounded-md w-full shadow-sm hover:bg-gray-700">
+                    Chiudi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

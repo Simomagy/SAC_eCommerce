@@ -16,6 +16,20 @@
     $("#confirmationModal").addClass("hidden");
   });
 
+  $(".view-details-button").on("click", function () {
+    $("#detailNome").text($(this).data("nome"));
+    $("#detailCognome").text($(this).data("cognome"));
+    $("#detailEmail").text($(this).data("email"));
+    $("#detailPoints").text($(this).data("points"));
+    $("#detailCardNumber").text($(this).data("cardnumber"));
+    $("#detailRole").text($(this).data("role"));
+    $("#detailsModal").removeClass("hidden");
+  });
+
+  $("#closeDetails").on("click", function () {
+    $("#detailsModal").addClass("hidden");
+  });
+
   $("#roleFilter").on("change", function () {
     let selectedRole = $(this).val();
     $("#clientiTableBody tr").each(function () {
