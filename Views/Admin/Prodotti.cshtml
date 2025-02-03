@@ -22,7 +22,7 @@
             <h1 class="text-3xl font-bold">Prodotti</h1>
         </header>
 
-        <div class="flex justify-between mb-4 w-full">
+        <div class="flex justify-between mb-4 w-full items-center">
             <div class="flex flex-col w-1/2">
                 <label for="searchBar" class="text-sm font-medium text-zinc-300 dark:text-zinc-400">Cerca:</label>
                 <input type="text" id="searchBar" placeholder="Cerca per Nome o Categoria"
@@ -46,8 +46,15 @@
                         <option value="desc">Decrescente</option>
                     </select>
                 </div>
+                <div class="flex justify-end h-fit mt-4">
+                    <button id="addProductButton"
+                            class="bg-green-500/50 border border-green-500 text-white px-4 py-2 rounded-md hover:bg-green-500">
+                        Aggiungi Prodotto
+                    </button>
+                </div>
             </div>
         </div>
+
 
         <div class="rounded-lg border border-zinc-200 p-4 md:p-8">
             <div class="overflow-y-scroll max-h-[500px]">
@@ -166,27 +173,74 @@
     </main>
 </div>
 
-<!-- Details Modal -->
-<div id="detailsModal"
+<!-- Add Product Modal -->
+<div id="addProductModal"
      class="fixed inset-0 backdrop-blur-md bg-zinc-950 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-1/4 mx-auto p-5 border w-96 shadow-lg rounded-md bg-zinc-950/50 backdrop-blur-xl">
+    <div class="relative top-1/4 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-zinc-950/50 backdrop-blur-xl">
         <div class="mt-3 text-center">
-            <i class="ti ti-info-circle text-blue-500 text-4xl"></i>
-            <h3 class="text-lg leading-6 font-medium text-zinc-50">Dettagli Prodotto</h3>
+            <i class="ti ti-plus text-green-500 text-4xl"></i>
+            <h3 class="text-lg leading-6 font-medium text-zinc-50">Aggiungi Prodotto</h3>
             <div class="mt-2 text-left">
-                <p class="text-sm text-gray-400"><strong>Nome:</strong> <span id="detailNome"></span></p>
-                <p class="text-sm text-gray-400"><strong>Descrizione:</strong> <span id="detailDescrizione"></span></p>
-                <p class="text-sm text-gray-400"><strong>Prezzo:</strong> <span id="detailPrezzo"></span></p>
-                <p class="text-sm text-gray-400"><strong>Categoria:</strong> <span id="detailCategoria"></span></p>
-                <p class="text-sm text-gray-400"><strong>Quantità:</strong> <span id="detailQuantita"></span></p>
-                <p class="text-sm text-gray-400"><strong>Disponibilità nei Negozi:</strong> <span
-                        id="detailDisponibilitaNegozi"></span></p>
-            </div>
-            <div class="mt-4">
-                <button id="closeDetails"
-                        class="px-4 py-2 bg-gray-600/50 border-2 border-gray-600 text-white text-base font-medium h-fit rounded-md w-full shadow-sm hover:bg-gray-700">
-                    Chiudi
-                </button>
+                <form id="addProductForm">
+                    <div class="mb-4 flex gap-2 justify-between">
+                        <div class="flex flex-col w-full">
+                            <label for="productName" class="block text-sm font-medium text-gray-400">Nome</label>
+                            <input type="text" id="productName" name="productName"
+                                   class="mt-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded-md w-full"/>
+                        </div>
+                        <div class="flex flex-col w-1/2">
+                            <label for="productPrice" class="block text-sm font-medium text-gray-400">Prezzo</label>
+                            <input type="number" step="0.01" id="productPrice" name="productPrice"
+                                   class="mt-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded-md w-full"/>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex flex-col">
+                            <label for="productDescription"
+                                   class="block text-sm font-medium text-gray-400">Descrizione</label>
+                            <textarea id="productDescription" name="productDescription"
+                                      class="mt-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded-md w-full"></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-4 flex gap-2 justify-between">
+                        <div class="flex flex-col w-1/2">
+                            <label for="productQuantity"
+                                   class="block text-sm font-medium text-gray-400">Quantità</label>
+                            <input type="number" id="productQuantity" name="productQuantity"
+                                   class="mt-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded-md w-full"/>
+                        </div>
+                        <div class="flex flex-col w-full">
+                            <label for="productCategory"
+                                   class="block text-sm font-medium text-gray-400">Categoria</label>
+                            <input type="text" id="productCategory" name="productCategory"
+                                   class="mt-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded-md w-full"/>
+                        </div>
+                    </div>
+                    <div class="mb-4 flex gap-2 justify-between">
+                        <div class="flex flex-col w-1/2">
+                            <label for="warehouseAvailability"
+                                   class="block text-sm font-medium text-gray-400">Disponibilità Magazzino</label>
+                            <input type="number" id="warehouseAvailability" name="warehouseAvailability"
+                                   class="mt-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded-md w-full"/>
+                        </div>
+                        <div class="flex flex-col w-full">
+                            <label for="storeAvailability"
+                                   class="block text-sm font-medium text-gray-400">Disponibilità Negozi</label>
+                            <input type="number" id="storeAvailability" name="storeAvailability"
+                                   class="mt-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded-md w-full"/>
+                        </div>
+                    </div>
+                    <div class="mt-10 flex justify-center gap-2">
+                        <button type="submit"
+                                class="px-4 py-2 bg-green-600/50 border-2 border-green-600 text-white text-base font-medium h-fit rounded-md w-full shadow-sm hover:bg-green-700">
+                            Aggiungi
+                        </button>
+                        <button type="button" id="closeAddProductModal"
+                                class="px-4 py-2 bg-gray-600/50 border-2 border-gray-600 text-white text-base font-medium h-fit rounded-md w-full shadow-sm hover:bg-gray-700">
+                            Chiudi
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

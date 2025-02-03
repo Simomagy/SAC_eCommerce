@@ -21,8 +21,6 @@
     return;
   }
 
-  console.log("Orders data:", orders);
-
   const ordersByWeek = {};
 
   orders.forEach((order) => {
@@ -36,9 +34,6 @@
 
   const labels = Object.keys(ordersByWeek);
   const data = Object.values(ordersByWeek);
-
-  console.log("Chart labels:", labels);
-  console.log("Chart data:", data);
 
   const ctx = $("#ordersChart")[0].getContext("2d");
   Chart.defaults.backgroundColor = "#27272a"; // tailwind zinc 800

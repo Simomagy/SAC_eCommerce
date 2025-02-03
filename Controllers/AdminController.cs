@@ -83,4 +83,65 @@ public class AdminController : Controller
         ViewBag.CurrentPage = page;
         return View(pagedProdotti);
     }
+
+    [HttpPost("elimina-prodotto/{id}")]
+    public IActionResult EliminaProdotto(int id)
+    {
+        _daoProdotti.DeleteRecord(id);
+        return RedirectToAction("Prodotti");
+    }
+
+    [HttpPost("aggiungi-prodotto")]
+    public IActionResult AggiungiProdotto([FromBody] ProdottoConDisponibilitaViewModel nuovoProdotto)
+    {
+        var prodotto = new Prodotto
+        {
+            Nome = nuovoProdotto.Prodotto.Nome,
+            Descrizione = nuovoProdotto.Prodotto.Descrizione,
+            Prezzo = nuovoProdotto.Prodotto.Prezzo,
+            Categoria = nuovoProdotto.Prodotto.Categoria,
+            Quantita = nuovoProdotto.Prodotto.Quantita,
+            Data_Inserimento = DateTime.Now
+        };
+
+        var result = _daoProdotti.CreateRecord(prodotto);
+
+        if (result)
+        {
+            var inventarioMagazzino = new Inventario
+            {
+                Prodotto = prodotto,
+                Negozio = new Negozio { Id = 1 }, // Assuming 1 is the ID for the warehouse
+                Tipo_Locazione = "Magazzino",
+                Quantita = nuovoProdotto.DisponibilitaMagazzino
+            };
+
+            var inventarioNegozi = new Inventario
+            {
+                Prodotto = prodotto,
+                Negozio = new Negozio { Id = 2 }, // Assuming 2 is the ID for the store
+                Tipo_Locazione = "Negozio",
+                Quantita = nuovoProdotto.DisponibilitaNegozi
+            };
+
+            _daoInventario.CreateRecord(inventarioMagazzino);
+            _daoInventario.CreateRecord(inventarioNegozi);
+
+            return Ok();
+        }
+
+        return BadRequest("Errore durante l'aggiunta del prodotto.");
+    }
+
+    [HttpGet("ordini")]
+    public IActionResult Ordini()
+    {
+        var userJson = HttpContext.Session.GetString("LoggedUser");
+        if (userJson == null) return RedirectToAction("Login", "Auth");
+        var user = JsonConvert.DeserializeObject<Utente>(userJson);
+        ViewBag.User = user;
+
+        var ordini = _daoOrdini.GetRecords();
+        return View(ordini);
+    }
 }

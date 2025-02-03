@@ -31,7 +31,7 @@ internal class DaoOrdini
 
         foreach (var prodottoDict in prodottiList)
         {
-            var idProdotto = prodottoDict["ID_Prodotto"];
+            var idProdotto = prodottoDict["Id"];
             var quantita = prodottoDict["Quantita"];
 
             var queryProdotto = $"SELECT * FROM {_tabellaProdotti} WHERE id_prodotto = @IdProdotto";
@@ -55,6 +55,8 @@ internal class DaoOrdini
     public bool CreateRecord(Entity entity)
     {
         var ordine = (Ordine)entity;
+        ordine.Totale = Math.Round(ordine.Prodotti.Sum(p => p.Prezzo * p.Quantita), 2);
+
         var parameters = new Dictionary<string, object>
         {
             { "@data", ordine.Data },
@@ -98,6 +100,13 @@ internal class DaoOrdini
 
             var prodottiJson = singleResponse["prodotti"].ToString();
             ordine.Prodotti = GetDetailedProdottiList(prodottiJson);
+            // Recalculate total
+            var recalculatedTotal = ordine.Prodotti.Sum(p => p.Prezzo * p.Quantita);
+            if (ordine.Totale != recalculatedTotal)
+            {
+                ordine.Totale = recalculatedTotal;
+                UpdateRecord(ordine);
+            }
 
             ordini.Add(ordine);
         }
@@ -108,6 +117,8 @@ internal class DaoOrdini
     public bool UpdateRecord(Entity entity)
     {
         var ordine = (Ordine)entity;
+        ordine.Totale = Math.Round(ordine.Prodotti.Sum(p => p.Prezzo * p.Quantita), 2);
+
         var parameters = new Dictionary<string, object>
         {
             { "@data", ordine.Data },
@@ -119,10 +130,11 @@ internal class DaoOrdini
                 JsonConvert.SerializeObject(ordine.Prodotti.Select(p => new { p.Id, p.Quantita }).ToList())
                     .Replace("'", "''")
             },
-            { "@id_Cliente", ordine.Utente.Id }
+            { "@id_Cliente", ordine.Utente.Id },
+            { "@Id", ordine.Id }
         };
         var query =
-            $"UPDATE {_tabellaOrdini} SET Data = @data, Tipo_Ordine = @tipoOrdine, Totale = @totale, Stato = @stato, Prodotti = @prodotti, Cliente = @id_Cliente WHERE ID_Ordine = @Id";
+            $"UPDATE {_tabellaOrdini} SET Data = @data, Tipo_Ordine = @tipoOrdine, Totale = @totale, Stato = @stato, Prodotti = @prodotti, ID_Cliente = @id_Cliente WHERE ID_Ordine = @Id";
         return _db.UpdateDb(query, parameters);
     }
 
@@ -151,6 +163,14 @@ internal class DaoOrdini
 
         var prodottiJson = singleResponse["prodotti"].ToString();
         ordine.Prodotti = GetDetailedProdottiList(prodottiJson);
+
+        // Recalculate total
+        var recalculatedTotal = Math.Round(ordine.Prodotti.Sum(p => p.Prezzo * p.Quantita), 2);
+        if (ordine.Totale != recalculatedTotal)
+        {
+            ordine.Totale = recalculatedTotal;
+            UpdateRecord(ordine);
+        }
 
         return ordine;
     }

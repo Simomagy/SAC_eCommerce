@@ -6,12 +6,27 @@
     $("#detailCategoria").text($(this).data("categoria"));
     $("#detailQuantita").text($(this).data("quantita"));
     $("#detailDisponibilitaNegozi").text($(this).data("disponibilita-negozi"));
-    console.log($(this).data("disponibilita-negozi"));
     $("#detailsModal").removeClass("hidden");
   });
 
   $("#closeDetails").on("click", function () {
     $("#detailsModal").addClass("hidden");
+  });
+
+  $(".delete-button").on("click", function () {
+    const productId = $(this).data("id");
+    if (confirm("Sei sicuro di voler eliminare questo prodotto?")) {
+      $.ajax({
+        url: `/admin/elimina-prodotto/${productId}`,
+        type: "POST",
+        success: function () {
+          location.reload();
+        },
+        error: function () {
+          alert("Errore durante l'eliminazione del prodotto.");
+        },
+      });
+    }
   });
 
   $("#searchBar").on("input", function () {
@@ -46,6 +61,41 @@
     });
     $.each(rows, function (index, row) {
       $("#prodottiTableBody").append(row);
+    });
+  });
+
+  // Add Product Modal
+  $("#addProductButton").on("click", function () {
+    $("#addProductModal").removeClass("hidden");
+  });
+
+  $("#closeAddProductModal").on("click", function () {
+    $("#addProductModal").addClass("hidden");
+  });
+
+  $("#addProductForm").on("submit", function (e) {
+    e.preventDefault();
+    const newProduct = {
+      Nome: $("#productName").val(),
+      Descrizione: $("#productDescription").val(),
+      Prezzo: parseFloat($("#productPrice").val()),
+      Categoria: $("#productCategory").val(),
+      Quantita: parseInt($("#productQuantity").val()),
+      DisponibilitaMagazzino: parseInt($("#warehouseAvailability").val()),
+      DisponibilitaNegozi: parseInt($("#storeAvailability").val()),
+    };
+
+    $.ajax({
+      url: "/admin/aggiungi-prodotto",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(newProduct),
+      success: function () {
+        location.reload();
+      },
+      error: function () {
+        alert("Errore durante l'aggiunta del prodotto.");
+      },
     });
   });
 });
