@@ -8,10 +8,11 @@ namespace SAC_eCommerce.Models.Daos
         #region Inizializzazione
         private readonly Database _db;
         private readonly string _tabella;
-        private DaoNegozi(IConfiguration configuration)
+
+        public DaoNegozi(IConfiguration configuration)
         {
             _db = new Database(configuration["db_name"], configuration["server_db"]);
-            _tabella = configuration["tables.negozio"];
+            _tabella = configuration["tables:negozi"];
         }
         #endregion
 
@@ -86,7 +87,7 @@ namespace SAC_eCommerce.Models.Daos
             return result is { Count: > 0 };
         }
 
-        public bool FindNegozio(int id)
+        public Negozio? FindNegozio(int id)
         {
             var query = $"SELECT * FROM {_tabella} WHERE ID_Negozio = @ID_Negozio";
             var parameters = new Dictionary<string, object>
@@ -94,7 +95,12 @@ namespace SAC_eCommerce.Models.Daos
                                 {"@ID_Negozio", id}
                             };
             var result = _db.ReadDb(query, parameters);
-            return result is { Count: > 0 };
+            if (result == null)
+                return null;
+            var negozio = new Negozio();
+            negozio.TypeSort(result[0]);
+            negozio.Id = Convert.ToInt32(result[0]["id_negozio"]);
+            return negozio;
         }
     }
 }

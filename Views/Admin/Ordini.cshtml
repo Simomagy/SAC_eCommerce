@@ -1,0 +1,148 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
+@model List<SAC_eCommerce.Models.Classes.Ordine>
+
+@{
+    ViewBag.Title = "Ordini";
+    var loggedUser = ViewBag.User as SAC_eCommerce.Models.Classes.Utente;
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Ordini</title>
+    <script src="~/js/Admin/Ordini.js"></script>
+</head>
+<body class="bg-zinc-950 text-white">
+<div class="flex h-screen">
+    @await Component.InvokeAsync("AdminNav", new { user = loggedUser })
+
+    <main class="flex-1 p-8 overflow-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold">Ordini</h1>
+        </header>
+
+        <div class="flex justify-between mb-4 w-full">
+            <div class="flex flex-col w-1/2">
+                <label for="searchBar" class="text-sm font-medium text-zinc-300 dark:text-zinc-400">Cerca:</label>
+                <input type="text" id="searchBar" placeholder="Cerca per Cliente o Stato"
+                       class="px-3 py-2 text-sm font-medium text-zinc-300 bg-zinc-700 border border-zinc-600 rounded-md"/>
+            </div>
+            <div class="flex space-x-4">
+                <div class="flex flex-col w-fit">
+                    <label for="sortBy" class="text-sm font-medium text-zinc-300 dark:text-zinc-400">Ordina per:</label>
+                    <select id="sortBy"
+                            class="px-3 py-2 text-sm font-medium text-zinc-300 bg-zinc-700 border border-zinc-600 rounded-md">
+                        <option value="Data">Data</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Stato">Stato</option>
+                    </select>
+                </div>
+                <div class="flex flex-col w-fit">
+                    <label for="sortOrder" class="text-sm font-medium text-zinc-300 dark:text-zinc-400">Ordine:</label>
+                    <select id="sortOrder"
+                            class="px-3 py-2 text-sm font-medium text-zinc-300 bg-zinc-700 border border-zinc-600 rounded-md">
+                        <option value="asc">Crescente</option>
+                        <option value="desc">Decrescente</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-lg border border-zinc-200 p-4 md:p-8">
+            <div class="overflow-y-scroll max-h-[500px]">
+                <table class="w-full text-sm text-left text-zinc-500 dark:text-zinc-400">
+                    <thead class="text-xs text-zinc-700 uppercase bg-zinc-50 dark:bg-zinc-700 dark:text-zinc-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">Data</th>
+                        <th scope="col" class="px-4 py-3">Cliente</th>
+                        <th scope="col" class="px-4 py-3">Stato</th>
+                        <th scope="col" class="px-4 py-3">Totale</th>
+                        <th scope="col" class="px-4 py-3">Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ordiniTableBody">
+                    @foreach (var ordine in Model)
+                    {
+                        <tr class="border-b dark:border-zinc-700" data-cliente="@ordine.Utente.Nome.ToLower()"
+                            data-stato="@ordine.Stato.ToLower()">
+                            <td class="px-4 py-3 font-medium text-zinc-900 whitespace-nowrap dark:text-white">
+                                @ordine.Data
+                            </td>
+                            <td class="px-4 py-3">@ordine.Utente.Email</td>
+                            <td class="px-4 py-3">@ordine.Stato</td>
+                            <td class="px-4 py-3">@ordine.Totale</td>
+                            <td class="px-4 py-3 flex space-x-2">
+                                <button type="button"
+                                        class="bg-blue-500/50 border border-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-500 view-details-button"
+                                        data-id="@ordine.Id" data-data="@ordine.Data"
+                                        data-cliente="@ordine.Utente.Email" data-stato="@ordine.Stato"
+                                        data-totale="@ordine.Totale"
+                                        data-prodotti='@Html.Raw(JsonConvert.SerializeObject(ordine.Prodotti))'>
+                                    <i class="ti ti-eye"></i>
+                                    Dettagli
+                                </button>
+                                <button type="button"
+                                        class="bg-danger-500/50 border border-danger-500 text-white px-2 py-1 rounded-md hover:bg-danger-500 delete-button"
+                                        data-id="@ordine.Id">
+                                    <i class="ti ti-trash"></i>
+                                    Elimina
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-4">
+            @for (var i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <a href="@Url.Action("Ordini", new { page = i, sortBy = ViewBag.SortBy, sortOrder = ViewBag.SortOrder })"
+                   class="px-3 py-1 mx-1 border rounded @(i == ViewBag.CurrentPage ? "bg-blue-500 text-white" : "bg-zinc-700 text-zinc-300")">
+                    @i
+                </a>
+            }
+        </div>
+    </main>
+</div>
+
+<!-- Details Modal -->
+<div id="detailsModal"
+     class="fixed inset-0 backdrop-blur-md bg-zinc-950 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-1/4 mx-auto p-5 border w-96 shadow-lg rounded-md bg-zinc-950/50 backdrop-blur-xl">
+        <div class="mt-3 text-center">
+            <i class="ti ti-info-circle text-blue-500 text-4xl"></i>
+            <h3 class="text-lg leading-6 font-medium text-zinc-50">Dettagli Ordine</h3>
+            <div class="mt-2 text-left">
+                <p class="text-sm text-gray-400"><strong>Data:</strong> <span id="detailData"></span></p>
+                <p class="text-sm text-gray-400"><strong>Cliente:</strong> <span id="detailCliente"></span></p>
+                <p class="text-sm text-gray-400"><strong>Stato:</strong> <span id="detailStato"></span></p>
+                <p class="text-sm text-gray-400"><strong>Totale:</strong> <span id="detailTotale"></span></p>
+                <table class="w-full text-sm text-left text-gray-400">
+                    <thead class="text-xs uppercase">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">Prodotto</th>
+                        <th scope="col" class="px-4 py-3">Quantità</th>
+                        <th scope="col" class="px-4 py-3">Prezzo unitario</th>
+                        <th scope="col" class="px-4 py-3">Totale</th>
+                    </tr>
+                    </thead>
+                    <tbody id="detailProdotti">
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">
+                <button id="closeDetails"
+                        class="px-4 py-2 bg-gray-600/50 border-2 border-gray-600 text-white text-base font-medium h-fit rounded-md w-full shadow-sm hover:bg-gray-700">
+                    Chiudi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

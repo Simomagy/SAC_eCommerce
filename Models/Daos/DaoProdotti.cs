@@ -22,7 +22,7 @@ namespace SAC_eCommerce.Models.Daos
                         "VALUES (@Codice_SKU, @Nome, @Descrizione, @Prezzo, @Categoria, @Stato, @Data_Inserimento)";
             var parameters = new Dictionary<string, object>
             {
-                {"@Codice_SKU", prodotto.Codice_SKU},
+                { "@Codice_SKU", "SKU" + prodotto.Id },
                 {"@Nome", prodotto.Nome},
                 {"@Descrizione", prodotto.Descrizione},
                 {"@Prezzo", prodotto.Prezzo},

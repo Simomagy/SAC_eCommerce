@@ -87,8 +87,8 @@ public class UtenteController : Controller
             {
                 Data = DateTime.Now,
                 Tipo_Ordine = "Acquisto Online",
-                Totale = prodotto.Prezzo,
                 Stato = "In Elaborazione",
+                Totale = prodotto.Prezzo,
                 Utente = user,
                 Prodotti = new List<Prodotto> { prodotto }
             };
